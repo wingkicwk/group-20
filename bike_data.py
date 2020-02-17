@@ -2,24 +2,28 @@ import requests
 # import json
 import pymysql
 # import cryptography
+import sqlalchemy
+from sqlalchemy import create_engine
+
 
 bike_url = 'https://api.jcdecaux.com/vls/v1/stations?contract=dublin&apiKey=a86228ee521650c4451c785d43683983f084bfa9'
 bike_json = requests.get(bike_url).json()
 l = len(bike_json)
 
-#connect to sql
+
 conn = pymysql.connect(
-    host='localhost',  # mysql服务器地址
+    host="database-softwareengieeringproject.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
     port=3306,  # 端口号
-    user='root',  # 用户名
-    passwd='12345678',  # 密码
-    db='software_static_bike',  # 数据库名称
+    user="group20",  # 用户名
+    passwd="comp30830",  # 密码
+    db="segroupproject",  # 数据库名称
     charset='utf8',  # 连接编码，根据需要填写
+
 )
+
+
 cur = conn.cursor()  # 创建并返回游标
 cur.execute("DROP TABLE IF EXISTS bd")
-
-
 
 #create a empty table
 sql_table = "CREATE TABLE bd (number  VARCHAR(100),name  VARCHAR(100),lat VARCHAR(100),lng VARCHAR(100),banking VARCHAR(100),bike_stands VARCHAR(100));"
@@ -52,5 +56,5 @@ for i in range(0,l):
             conn.rollback()
 
         # 关闭数据库连接,没有close就可以导入？？？
-        # conn.close()
+    # conn.close()
 
