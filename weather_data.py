@@ -9,7 +9,7 @@ import datetime
 import traceback
 
 def insertWeatherIntoDB():
-    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ae2ee3da2b0c189093dfa05377635301'
+    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ef2f7a40c765b06a8ab8b9c674fe8808'
     weather_json = requests.get(weather_url).json()
     l = len(weather_json)
     conn = pymysql.connect(
@@ -52,7 +52,7 @@ def insertWeatherIntoDB():
     cod = str(weather_json['cod'])
     info_1 = (tz, id, name,cod)
     try:
-        #Gust is available sometimes so we add that with try if it is here 
+        #Gust is available sometimes so we add gust with try and except block if it exists
         w2 = (str(weather_json['visibility']), str(wind['speed']),str(wind['deg']),str(wind['gust']))
         info = t + w  + m + w2+ c + s+info_1
         sql_insert = "insert into weather (lon,lat,weather_id,main,description,icon,base,temp,feels_like,temp_min,temp_max,pressure,humidity,visibility,speed,deg,gust,clouds_all,dt,sys_type,sys_id,sys_country,sunrise,sunset ,timezone,id,name,cod) values  (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + ","+"'"+info[5]+"'"  + ","+"'"+info[6]+"'" + ","+"'"+info[7]+"'" + ","+"'"+info[8]+"'" + ","+"'"+info[9]+"'" + ","+"'"+info[10]+"'" + ","+"'"+info[11]+"'" + ","+"'"+info[12]+"'" + ","+"'"+info[13]+"'" + ","+"'"+info[14]+"'" + ","+"'"+info[15]+"'" + ","+"'"+info[16]+"'" + ","+"'"+info[17]+"'" + ","+"'"+info[18]+"'" + ","+"'"+info[19]+"'" + ","+"'"+info[20]+"'" + ","+"'"+info[21]+"'" + ","+"'"+info[22]+"'" + ","+"'"+info[23]+"'" + ","+"'"+info[24]+"'" + ","+"'"+info[25]+"'" + ","+"'"+info[26]+"'"  + ","+"'"+info[27]+"'"  +  ");"
@@ -69,14 +69,13 @@ def insertWeatherIntoDB():
     except:
         # Rollback in case there is any error
         conn.rollback()
-index=0
+
 while True:  
     try:
         insertWeatherIntoDB()
         # wait for 5 minutes
         time.sleep(300)
-        print("Now",index)
-        index+=1
+
         
     except:
         #print error messages with traceback if error occurs
