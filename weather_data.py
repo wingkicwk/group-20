@@ -8,24 +8,28 @@ import time
 import datetime
 import traceback
 
+conn = pymysql.connect(
+    host="database-softwareengieeringproject.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
+    port=3306,  # 端口号
+    user="group20",  # 用户名
+    passwd="comp30830",  # 密码
+    db="segroupproject",  # 数据库名称
+    charset='utf8',  # 连接编码，根据需要填写
+    )
+cur = conn.cursor()  # 创建并返回游标
+cur.execute("DROP TABLE IF EXISTS weather")
+#create a empty table
+sql_table = "CREATE TABLE weather (lon VARCHAR(100),lat VARCHAR(100),weather_id VARCHAR(100),main VARCHAR(100),description VARCHAR(100),icon VARCHAR(100),base VARCHAR(100),temp VARCHAR(100),feels_like VARCHAR(100),temp_min VARCHAR(100),temp_max VARCHAR(100),pressure VARCHAR(100),humidity VARCHAR(100),visibility VARCHAR(100),speed VARCHAR(100),deg VARCHAR(100),gust VARCHAR(100),clouds_all VARCHAR(100),dt VARCHAR(100),sys_type VARCHAR(100),sys_id VARCHAR(100),sys_country VARCHAR(100),sunrise VARCHAR(100),sunset VARCHAR(100),timezone VARCHAR(100),id VARCHAR(100),name VARCHAR(100),cod VARCHAR(100));"
+cur.execute(sql_table)
+
+
 def insertWeatherIntoDB():
     weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ef2f7a40c765b06a8ab8b9c674fe8808'
     weather_json = requests.get(weather_url).json()
     l = len(weather_json)
-    conn = pymysql.connect(
-        host="database-softwareengieeringproject.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
-        port=3306,  # 端口号
-        user="group20",  # 用户名
-        passwd="comp30830",  # 密码
-        db="segroupproject",  # 数据库名称
-        charset='utf8',  # 连接编码，根据需要填写
-        )
-    cur = conn.cursor()  # 创建并返回游标
-    cur.execute("DROP TABLE IF EXISTS weather")
 
-    #create a empty table
-    sql_table = "CREATE TABLE weather (lon VARCHAR(100),lat VARCHAR(100),weather_id VARCHAR(100),main VARCHAR(100),description VARCHAR(100),icon VARCHAR(100),base VARCHAR(100),temp VARCHAR(100),feels_like VARCHAR(100),temp_min VARCHAR(100),temp_max VARCHAR(100),pressure VARCHAR(100),humidity VARCHAR(100),visibility VARCHAR(100),speed VARCHAR(100),deg VARCHAR(100),gust VARCHAR(100),clouds_all VARCHAR(100),dt VARCHAR(100),sys_type VARCHAR(100),sys_id VARCHAR(100),sys_country VARCHAR(100),sunrise VARCHAR(100),sunset VARCHAR(100),timezone VARCHAR(100),id VARCHAR(100),name VARCHAR(100),cod VARCHAR(100));"
-    cur.execute(sql_table)
+
+
     information = []
     info_1 = []
     # info_2 = []
@@ -74,7 +78,7 @@ while True:
     try:
         insertWeatherIntoDB()
         # wait for 5 minutes
-        time.sleep(300)
+        time.sleep(60)
 
         
     except:
