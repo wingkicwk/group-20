@@ -36,6 +36,7 @@ def insert_DynamicBikeData_IntoDB():
         bike_line = bike_json[i]
 
         #change the unix time to format time version
+
         last_update = str(bike_line['last_update'])
         last_update_sub = int(last_update[:-3])
         format_time = datetime.datetime.fromtimestamp(last_update_sub).strftime('%Y-%m-%d %H:%M:%S')
