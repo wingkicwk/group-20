@@ -31,7 +31,6 @@ def insert_DynamicBikeData_IntoDB():
     # get the current time and change the format
     now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    # print(str(now_time))
     # print(now_time)
     for i in range(0,l):
         bike_line = bike_json[i]
