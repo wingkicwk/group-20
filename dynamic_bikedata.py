@@ -35,7 +35,14 @@ def insert_DynamicBikeData_IntoDB():
     for i in range(0,l):
         bike_line = bike_json[i]
 
-        info = [str(bike_line['number']),str(bike_line['available_bike_stands']),str(bike_line['available_bikes']),str(bike_line['status']),str(bike_line['last_update']),now_time]  #keep static data 'number' as a primary key
+        #change the unix time to format time version
+        last_update = str(bike_line['last_update'])
+        last_update_sub = int(last_update[:-3])
+        format_time = datetime.datetime.fromtimestamp(last_update_sub).strftime('%Y-%m-%d %H:%M:%S')
+        # print(format_time)
+
+
+        info = [str(bike_line['number']),str(bike_line['available_bike_stands']),str(bike_line['available_bikes']),str(bike_line['status']),str(format_time),now_time]  #keep static data 'number' as a primary key
 
         sql_insert = "insert into dynamic_bikeData (number,available_bike_stands,available_bikes,status,last_update,now_time) values (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + "," + "'"+info[5]+"'" +");"
 
@@ -52,7 +59,7 @@ while True:
     try:
         insert_DynamicBikeData_IntoDB()
         # wait for 5 minutes
-        time.sleep(10)
+        time.sleep(300)
     except:
         #print error messages with traceback if error occurs
         print(traceback.format_exc())
