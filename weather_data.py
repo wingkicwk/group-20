@@ -63,7 +63,7 @@ def insertWeatherIntoDB():
         # Gust is available sometimes so we add gust with try and except block if it exists
         w2 = (str(weather_json['visibility']), str(wind['speed']), str(wind['deg']), str(wind['gust']))
         info = t + w + m + w2 + c + s + info_1
-        sql_insert = "insert into weather (currnet, lon,lat,weather_id,main,description,icon,base,temp,feels_like,temp_min,temp_max,pressure,humidity,visibility,speed,deg,gust,clouds_all,dt,sys_type,sys_id,sys_country,sunrise,sunset ,timezone,id,name,cod) values  (" + "'" + \
+        sql_insert = "insert into weather (current, lon,lat,weather_id,main,description,icon,base,temp,feels_like,temp_min,temp_max,pressure,humidity,visibility,speed,deg,gust,clouds_all,dt,sys_type,sys_id,sys_country,sunrise,sunset ,timezone,id,name,cod) values  (" + "'" + \
                      currentTime + "'" + "," + "'" +  info[0] + "'" + "," + "'" + info[1] + "'" + "," + "'" + info[2] + "'" + "," + "'" + info[
                          3] + "'" + "," + "'" + info[4] + "'" + "," + "'" + info[5] + "'" + "," + "'" + info[
                          6] + "'" + "," + "'" + info[7] + "'" + "," + "'" + info[8] + "'" + "," + "'" + info[
@@ -102,7 +102,7 @@ while True:
     try:
         insertWeatherIntoDB()
         # wait for 5 minutes
-        time.sleep(60*30)
+        time.sleep(30*60)
 
 
     except:
