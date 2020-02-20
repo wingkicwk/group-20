@@ -3,6 +3,8 @@ import pymysql
 import time 
 import datetime
 import traceback
+
+
 conn = pymysql.connect(
     host="database-softwareengieeringproject.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
     port=3306,  # 端口号
@@ -17,7 +19,7 @@ cur = conn.cursor()  # 创建并返回游标
 cur.execute("DROP TABLE IF EXISTS dynamic_bikeData")
 
 #create a empty table
-sql_table = "CREATE TABLE dynamic_bikeData (number VARCHAR(100), status VARCHAR(100),available_bike_stands VARCHAR(100),available_bikes VARCHAR(100),last_update VARCHAR(100));"
+sql_table = "CREATE TABLE dynamic_bikeData (number VARCHAR(100), status VARCHAR(100),available_bike_stands VARCHAR(100),available_bikes VARCHAR(100),last_update VARCHAR(100),now_time VARCHAR(100));"
 cur.execute(sql_table)
     
 def insert_DynamicBikeData_IntoDB():
@@ -26,13 +28,17 @@ def insert_DynamicBikeData_IntoDB():
     l = len(bike_json)
 
     info = []
+    # get the current time and change the format
+    now_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
+    # print(str(now_time))
+    # print(now_time)
     for i in range(0,l):
         bike_line = bike_json[i]
 
-        info = [str(bike_line['number']),str(bike_line['available_bike_stands']),str(bike_line['available_bikes']),str(bike_line['status']),str(bike_line['last_update'])]  #keep static data 'number' as a primary key
+        info = [str(bike_line['number']),str(bike_line['available_bike_stands']),str(bike_line['available_bikes']),str(bike_line['status']),str(bike_line['last_update']),now_time]  #keep static data 'number' as a primary key
 
-        sql_insert = "insert into dynamic_bikeData (number,available_bike_stands,available_bikes,status,last_update) values (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + ");"
+        sql_insert = "insert into dynamic_bikeData (number,available_bike_stands,available_bikes,status,last_update,now_time) values (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + "," + "'"+info[5]+"'" +");"
 
         try:
             # 执行sql语句
