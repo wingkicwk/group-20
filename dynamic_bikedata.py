@@ -16,10 +16,11 @@ conn = pymysql.connect(
 )
 
 cur = conn.cursor()  # 创建并返回游标
-cur.execute("DROP TABLE IF EXISTS dynamic_bikeData")
+
+# cur.execute("DROP TABLE IF EXISTS dynamic_bikeData")
 
 #create a empty table
-sql_table = "CREATE TABLE dynamic_bikeData (number VARCHAR(100), status VARCHAR(100),available_bike_stands VARCHAR(100),available_bikes VARCHAR(100),last_update VARCHAR(100),now_time VARCHAR(100));"
+sql_table = "CREATE TABLE IF NOT EXISTS `dynamic_bikeData` (number VARCHAR(100), status VARCHAR(100),available_bike_stands VARCHAR(100),available_bikes VARCHAR(100),last_update VARCHAR(100),now_time VARCHAR(100));"
 cur.execute(sql_table)
     
 def insert_DynamicBikeData_IntoDB():

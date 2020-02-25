@@ -20,9 +20,9 @@ conn = pymysql.connect(
     charset='utf8',  # 连接编码，根据需要填写
 )
 cur = conn.cursor()  # 创建并返回游标
-cur.execute("DROP TABLE IF EXISTS weather")
+# cur.execute("DROP TABLE IF EXISTS weather")
 # create a empty table
-sql_table = "CREATE TABLE weather (current VARCHAR(100), lon VARCHAR(100),lat VARCHAR(100),weather_id VARCHAR(100),main VARCHAR(100),description VARCHAR(100),icon VARCHAR(100),base VARCHAR(100),temp VARCHAR(100),feels_like VARCHAR(100),temp_min VARCHAR(100),temp_max VARCHAR(100),pressure VARCHAR(100),humidity VARCHAR(100),visibility VARCHAR(100),speed VARCHAR(100),deg VARCHAR(100),gust VARCHAR(100),clouds_all VARCHAR(100),dt VARCHAR(100),sys_type VARCHAR(100),sys_id VARCHAR(100),sys_country VARCHAR(100),sunrise VARCHAR(100),sunset VARCHAR(100),timezone VARCHAR(100),id VARCHAR(100),name VARCHAR(100),cod VARCHAR(100));"
+sql_table = "CREATE TABLE IF NOT EXISTS `weather` (current VARCHAR(100), lon VARCHAR(100),lat VARCHAR(100),weather_id VARCHAR(100),main VARCHAR(100),description VARCHAR(100),icon VARCHAR(100),base VARCHAR(100),temp VARCHAR(100),feels_like VARCHAR(100),temp_min VARCHAR(100),temp_max VARCHAR(100),pressure VARCHAR(100),humidity VARCHAR(100),visibility VARCHAR(100),speed VARCHAR(100),deg VARCHAR(100),gust VARCHAR(100),clouds_all VARCHAR(100),dt VARCHAR(100),sys_type VARCHAR(100),sys_id VARCHAR(100),sys_country VARCHAR(100),sunrise VARCHAR(100),sunset VARCHAR(100),timezone VARCHAR(100),id VARCHAR(100),name VARCHAR(100),cod VARCHAR(100));"
 cur.execute(sql_table)
 
 

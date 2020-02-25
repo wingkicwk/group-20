@@ -23,10 +23,9 @@ conn = pymysql.connect(
 
 
 cur = conn.cursor()  # 创建并返回游标
-cur.execute("DROP TABLE IF EXISTS bd")
-
+# cur.execute("DROP TABLE IF EXISTS bd")
 #create a empty table
-sql_table = "CREATE TABLE bd (number  VARCHAR(100),name  VARCHAR(100),lat VARCHAR(100),lng VARCHAR(100),banking VARCHAR(100),bike_stands VARCHAR(100));"
+sql_table = "CREATE TABLE IF NOT EXISTS `bd` (number  VARCHAR(100),name  VARCHAR(100),lat VARCHAR(100),lng VARCHAR(100),banking VARCHAR(100),bike_stands VARCHAR(100));"
 cur.execute(sql_table)
 info_1 = []
 info_2 = []
