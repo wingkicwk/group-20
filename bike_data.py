@@ -23,9 +23,9 @@ conn = pymysql.connect(
 
 
 cur = conn.cursor()  # 创建并返回游标
-# cur.execute("DROP TABLE IF EXISTS bd")
+cur.execute("DROP TABLE IF EXISTS station")
 #create a empty table
-sql_table = "CREATE TABLE IF NOT EXISTS `bd` (number  VARCHAR(100),name  VARCHAR(100),lat VARCHAR(100),lng VARCHAR(100),banking VARCHAR(100),bike_stands VARCHAR(100));"
+sql_table = "CREATE TABLE `Bikestation` (number  VARCHAR(100),name  VARCHAR(100),lat VARCHAR(100),lng VARCHAR(100),banking VARCHAR(100),bike_stands VARCHAR(100));"
 cur.execute(sql_table)
 info_1 = []
 info_2 = []
@@ -41,19 +41,19 @@ for i in range(0,l):
 #     print(len(position))
     for j in range(0,len(position)):
         info_2 = [str(position['lat']),str(position['lng'])]
-        info = info_1[:2] + info_2 + info_1[2:]
-        # print(info)
-        sql_insert = "insert into bd (number,name,lat,lng,banking,bike_stands) values (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + ","+"'"+info[5]+"'" + ");"
-        # print(sql_insert)
-        try:
-            # 执行sql语句
-            cur.execute(sql_insert)
-            # 提交到数据库执行
-            conn.commit()
-        except:
-            # Rollback in case there is any error
-            conn.rollback()
+    info = info_1[:2] + info_2 + info_1[2:]
+    # print(info)
+    sql_insert = "insert into Bikestation (number,name,lat,lng,banking,bike_stands) values (" + "'"+info[0]+"'" +","+ "'"+info[1]+"'" + ","+"'"+info[2]+"'" + ","+"'"+info[3]+"'" + ","+"'"+info[4]+"'" + ","+"'"+info[5]+"'" + ");"
+    # print(sql_insert)
+    try:
+        # 执行sql语句
+        cur.execute(sql_insert)
+        # 提交到数据库执行
+        conn.commit()
+    except:
+        # Rollback in case there is any error
+        conn.rollback()
 
-        # 关闭数据库连接,没有close就可以导入？？？
-    # conn.close()
+    # 关闭数据库连接,没有close就可以导入？？？
+# conn.close()
 
