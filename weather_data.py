@@ -8,7 +8,7 @@ import time
 import datetime
 import traceback
 
-currentTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+
 
 
 conn = pymysql.connect(
@@ -27,6 +27,7 @@ cur.execute(sql_table)
 
 
 def insertWeatherIntoDB():
+    currentTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
     weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ef2f7a40c765b06a8ab8b9c674fe8808'
     weather_json = requests.get(weather_url).json()
     l = len(weather_json)
