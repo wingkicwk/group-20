@@ -51,5 +51,20 @@ def get_stations():
 
     return jsonify(stations=stations)
 
+@app.route('/dynamicBike')
+def get_dynamicBike():
+    conn = connect_to_database()
+
+    cur = conn.cursor()
+    dynamicBike = []
+    sqlFetchCommand = """SELECT * from dynamic_bikeData WHERE (now_time) in (select (max(now_time))from dynamic_bikeData);;"""
+    cur.execute(sqlFetchCommand)
+    rows = cur.fetchall()
+
+    for row in rows:
+        dynamicBike.append(dict(number = int(row[0]), status = row[1], available_bike_stands = int(row[2]), available_bikes = int(row[3]), last_update = row[4],now_time= row[5]))
+
+    return jsonify(dynamicBike=dynamicBike)
+
 if __name__ == '__main__':
     app.run(debug =True)

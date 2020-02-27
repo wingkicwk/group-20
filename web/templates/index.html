@@ -27,6 +27,10 @@ function initialize() {
         showStationMarkers(data);
     });
 
+    $.getJSON("http://127.0.0.1:5000/dynamicBike", null, function (data1) {
+        showStationMarkers(data1);
+    });
+
 
     function showStationMarkers(data) {
         let json = $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
@@ -34,24 +38,40 @@ function initialize() {
             if ('stations' in data) {
 
                 var stations = data.stations;
-
                 console.log('stations', stations);
                 for (var i = 0; i < stations.length; i++) {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
+                    var infowindow = new google.maps.InfoWindow();
+                    var stationsInfo = '<div><h2> ' + stations[i].name + '</h2><p> Station number: ' +stations[i].number + '</p><p>Bike Stands number: '+stations[i].bike_stands + '</p></div>';
                     var marker = new google.maps.Marker({
                         position: {
                             lat: lat,
                             lng: lng
                         },
                         map: map,
+                        animation:google.maps.Animation.Drop, 
                         title: stations[i].name,
                         station_number: stations[i].number
                     });
                     marker.setMap(map);
-                }
+                    // google.maps.event.addListener(marker, 'click', function(){
+                    var infowindow = new google.maps.InfoWindow({
+                        content:stationsInfo 
+                    });
+                    infowindow.open(map, marker);
+                    // google.maps.event.addListener(marker, 'click', function(){
+                    //     // infowindow.open();
+                    //     infowindow.open(map, marker);
+                    //     infowindow.setContent(`<div id="infowindow">${stationsInfo}</div>`);
+                        
+    // });
+                };
+
             }
+
         });
+
 
     }
 
