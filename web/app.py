@@ -22,7 +22,8 @@ def connect_to_database():
         db="segroupproject",  # 数据库名称
         charset='utf8',  # 连接编码，根据需要填写
     )
-    cur = conn.cursor()  # 创建并返回游标
+    return conn
+    # cur = conn.cursor()  # 创建并返回游标
 
 
 def get_db():
@@ -36,15 +37,17 @@ def root():
     return render_template('index.html')
 @app.route('/stations')
 def get_stations():
-    conn = get_db()
-    # conn.row_factory = sqlite3.Row
-
+    conn = connect_to_database()
+    # conn = get_db()
+    # # conn.row_factory = sqlite3.Row
     cur = conn.cursor()
     stations = []
 
-    rows = cur.execute("SELECCT * from stations;")
+    cur.execute("SELECT * from Bikestation;")
+    rows = cur.fetchall()
+
     for row in rows:
-        stations.append(dict(row))
+        stations.append(dict(number = int(row[0]), name = row[1], lat = float(row[2]), lng = float(row[3]), banking = row[4],bike_stands= row[5]))
 
     return jsonify(stations=stations)
 

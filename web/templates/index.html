@@ -1,23 +1,64 @@
 <html>
 <head>
+
     <div style = "text-align: center;">dublin bike</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
-        #不知道为什么用api就说图片加载有问题,需要将api key换一下
+
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvBNXUTSTxrubQdbSTLWk01GbuAEoq2H0&sensor=false">
 </script>
 
 <script>
-function initialize()
-{
-var mapProp = {
-  center:new google.maps.LatLng(53.350140, -6.266155),
-  zoom:13,
-  mapTypeId:google.maps.MapTypeId.ROADMAP
-  };
-var map=new google.maps.Map(document.getElementById("googleMap"),mapProp);
+
+    var myCenter=new google.maps.LatLng(53.350140, -6.266155);
+
+function initialize() {
+    var mapProp = {
+        center: new google.maps.LatLng(53.350140, -6.266155),
+        zoom: 13,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+    var marker = new google.maps.Marker({
+        position: myCenter,
+    });
+    $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
+        showStationMarkers(data);
+    });
+
+
+    function showStationMarkers(data) {
+        let json = $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
+
+            if ('stations' in data) {
+
+                var stations = data.stations;
+
+                console.log('stations', stations);
+                for (var i = 0; i < stations.length; i++) {
+                    var lat = stations[i].lat;
+                    var lng = stations[i].lng;
+                    var marker = new google.maps.Marker({
+                        position: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        map: map,
+                        title: stations[i].name,
+                        station_number: stations[i].number
+                    });
+                    marker.setMap(map);
+                }
+            }
+        });
+
+    }
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
+
 </script>
 </head>
 
