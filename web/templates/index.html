@@ -38,12 +38,15 @@ function initialize() {
             if ('stations' in data) {
 
                 var stations = data.stations;
+
                 console.log('stations', stations);
                 for (var i = 0; i < stations.length; i++) {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
-                    var infowindow = new google.maps.InfoWindow();
-                    var stationsInfo = '<div><h2> ' + stations[i].name + '</h2><p> Station number: ' +stations[i].number + '</p><p>Bike Stands number: '+stations[i].bike_stands + '</p></div>';
+    var infowindow = new google.maps.InfoWindow();
+                    var stationsInfo =  stations[i].number + " " +stations[i].name;
+                    // console.log(stationsInfo);
+                    var station_number = stations[i].number;
                     var marker = new google.maps.Marker({
                         position: {
                             lat: lat,
@@ -53,18 +56,44 @@ function initialize() {
                         animation:google.maps.Animation.Drop, 
                         title: stations[i].name,
                         station_number: stations[i].number
+
                     });
                     marker.setMap(map);
-                    // google.maps.event.addListener(marker, 'click', function(){
+
+                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
+                    var contentString = stationsInfo;
+                    // console.log(stationsInfo);
                     var infowindow = new google.maps.InfoWindow({
-                        content:stationsInfo 
-                    });
+                    content: contentString
+                    })
+
+                    return function () {
                     infowindow.open(map, marker);
+                    }
+                    })(marker, i));
+
+                    // var contentinfo = station_number;
+                    // // console.log(contentinfo);
+                    //
+                    // var infowindow = new google.maps.InfoWindow({
+                    //         content: contentinfo
+                    //     });
+                    // google.maps.event.addListener(marker, 'click', function(){
+                    //
+                    //     console.log(contentinfo);
+                    //
+                    //
+                    //     // infowindow.setContent(content);
+                    //     //
+                    //     infowindow.open(map, marker);
+                    //
+                    // });
+
                     // google.maps.event.addListener(marker, 'click', function(){
                     //     // infowindow.open();
                     //     infowindow.open(map, marker);
                     //     infowindow.setContent(`<div id="infowindow">${stationsInfo}</div>`);
-                        
+
     // });
                 };
 
