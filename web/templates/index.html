@@ -44,7 +44,12 @@ function initialize() {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
     var infowindow = new google.maps.InfoWindow();
-                    var stationsInfo =  stations[i].number + " " +stations[i].name;
+
+                    // stations[i].number + " " +stations[i].name + " "+ stations[i].bike_stands;
+                    var stationsInfo =  '<div class="info_content">' +
+    '<p>' + 'station_number:' + stations[i].number + '</p>' +
+    '<p>' + 'station_name:'+ stations[i].name + '</p>' + '<p>' + 'station_bike_stands:'+ stations[i].bike_stands + '</p>' +
+                        '</div>';
                     // console.log(stationsInfo);
                     var station_number = stations[i].number;
                     var marker = new google.maps.Marker({

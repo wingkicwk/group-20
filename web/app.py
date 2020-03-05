@@ -15,7 +15,7 @@ def connect_to_database():
     #                                                                       config.PORT,
     #                                                                       config.DB),echo=True)
     conn = pymysql.connect(
-        host="database-softwareengieeringproject.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
+        host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
         port=3306,  # 端口号
         user="group20",  # 用户名
         passwd="comp30830",  # 密码
