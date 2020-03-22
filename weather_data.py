@@ -103,7 +103,7 @@ while True:
     try:
         insertWeatherIntoDB()
         # wait for 5 minutes
-        time.sleep(60*5)
+        time.sleep(20*60)
 
 
     except:
