@@ -1,5 +1,6 @@
 from flask import Flask, g, render_template, jsonify
 import configparser
+import time
 import requests
 # import json
 import pymysql
@@ -65,6 +66,19 @@ def get_dynamicBike():
         dynamicBike.append(dict(number = int(row[0]), status = row[1], available_bike_stands = int(row[2]), available_bikes = int(row[3]), last_update = row[4],now_time= row[5]))
 
     return jsonify(dynamicBike=dynamicBike)
+@app.route('/weather')
+def get_weather():
+    conn = connect_to_database()
 
+    cur = conn.cursor()
+    weather = []
+    sqlFetchCommand = """SELECT * from weather WHERE (current) in (select (max(current))from weather);;"""
+    cur.execute(sqlFetchCommand)
+    rows = cur.fetchall()
+
+    for row in rows:
+        weather.append(dict(main = (row[4]), description = row[5], temp = float(row[8]), feels_like = float(row[9]), temp_min =float(row[10]), temp_max =float(row[11]), pressure =int(row[12]), humidity =int(row[13]), visibility =int(row[14]), wind_speed =float(row[15]), wind_deg =int(row[16]), gust =row[17], sunrise =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[23]))), sunset =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[24])))))
+
+    return jsonify(weather=weather)
 if __name__ == '__main__':
     app.run(debug =True)
