@@ -10,7 +10,6 @@ import traceback
 
 
 
-
 conn = pymysql.connect(
     host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
     port=3306,  # 端口号
@@ -28,7 +27,7 @@ cur.execute(sql_table)
 
 def insertWeatherIntoDB():
     currentTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
-    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ef2f7a40c765b06a8ab8b9c674fe8808'
+    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ae2ee3da2b0c189093dfa05377635301'
     weather_json = requests.get(weather_url).json()
     l = len(weather_json)
 
