@@ -10,7 +10,6 @@ import traceback
 
 
 
-
 conn = pymysql.connect(
     host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
     port=3306,  # 端口号
