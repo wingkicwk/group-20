@@ -75,9 +75,9 @@ def insertWeatherIntoDB():
                          24] + "'" + "," + "'" + info[25] + "'" + "," + "'" + info[26] + "'" + "," + "'" + info[
                          27] + "'" + ");"
     except:
-        w2 = (str(weather_json['visibility']), str(wind['speed']), str(wind['deg']))
+        w2 = (str(weather_json['visibility']), str(wind['speed']))
         info = t + w + m + w2 + c + s + info_1
-        sql_insert = "insert into weather (current, lon,lat,weather_id,main,description,icon,base,temp,feels_like,temp_min,temp_max,pressure,humidity,visibility,speed,deg,clouds_all,dt,sys_type,sys_id,sys_country,sunrise,sunset ,timezone,id,name,cod) values  (" + "'" + \
+        sql_insert = "insert into weather (current, lon,lat,weather_id,main,description,icon,base,temp,feels_like,temp_min,temp_max,pressure,humidity,visibility,speed,clouds_all,dt,sys_type,sys_id,sys_country,sunrise,sunset ,timezone,id,name,cod) values  (" + "'" + \
                      currentTime + "'" + "," + "'" +  info[0] + "'" + "," + "'" + info[1] + "'" + "," + "'" + info[2] + "'" + "," + "'" + info[
                          3] + "'" + "," + "'" + info[4] + "'" + "," + "'" + info[5] + "'" + "," + "'" + info[
                          6] + "'" + "," + "'" + info[7] + "'" + "," + "'" + info[8] + "'" + "," + "'" + info[
@@ -86,7 +86,7 @@ def insertWeatherIntoDB():
                          15] + "'" + "," + "'" + info[16] + "'" + "," + "'" + info[17] + "'" + "," + "'" + info[
                          18] + "'" + "," + "'" + info[19] + "'" + "," + "'" + info[20] + "'" + "," + "'" + info[
                          21] + "'" + "," + "'" + info[22] + "'" + "," + "'" + info[23] + "'" + "," + "'" + info[
-                         24] + "'" + "," + "'" + info[25] + "'" + "," + "'" + info[26] + "'" + ");"
+                         24] + "'" + "," + "'" + info[25] + "'" + ");"
 
     try:
         # 执行sql语句
