@@ -39,6 +39,7 @@ def insertWeatherIntoDB():
     # information = [str(weather_json['coord']),str(weather_json['name']),str(weather_json['banking']),str(weather_json['bike_stands'])]
 
     coordination = weather_json['coord']
+    coordination1 = weather_json['coor']
     weather = weather_json['weather'][0]
     main = weather_json['main']
     wind = weather_json['wind']
@@ -108,4 +109,6 @@ while True:
 
     except:
         # print error messages with traceback if error occurs
+
         print(traceback.format_exc())
+        time.sleep(1 * 60)
