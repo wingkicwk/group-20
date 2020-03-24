@@ -2,7 +2,7 @@
 <head>
 
     <div style = "text-align: center;">dublin bike</div>
-    <link rel=stylesheet type="text/css" href="index.css">
+    <!-- <link rel=stylesheet type="text/css" href="index.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script
 
@@ -24,33 +24,154 @@ function initialize() {
     var marker = new google.maps.Marker({
         position: myCenter,
     });
-    $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
-        showStationMarkers(data);
-    });
+    // $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
+    //     showStationMarkers(data);
+    // });
 
-    $.getJSON("http://127.0.0.1:5000/dynamicBike", null, function (data1) {
-        showStationMarkers(data1);
-    });
+    // $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    //     showStationMarkers(obj);
+    // });
 
 
 
-    function showStationMarkers(data) {
-        let json = $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
+//     function showStationMarkers(data) {
+//         let json = $.getJSON("http://127.0.0.1:5000/stations", null, function (data) {
 
-            if ('stations' in data) {
+//             // if ('dynamicBike' in data) {
 
-                var stations = data.stations;
+//                 var stations = data.stations;
+
+                
+
+//                 for (var i = 0; i < stations.length; i++) {
+//                     var lat = stations[i].lat;
+//                     var lng = stations[i].lng;
+//                     var infowindow = new google.maps.InfoWindow();
+
+//                     // stations[i].number + " " +stations[i].name + " "+ stations[i].bike_stands;
+//                     var stationsInfo =  '<div class="info_content">' +
+//                     '<p>' + 'station_number:' + stations[i].number + '</p>' +
+//                     '<p>' + 'station_name:'+ stations[i].name + '</p>' + '<p>' + 'station_bike_stands:'+ stations[i].bike_stands + '</p>' +
+//                         '</div>';
+//                     // console.log(stationsInfo);
+//                     var station_number = stations[i].number;
+//                     var marker = new google.maps.Marker({
+//                         position: {
+//                             lat: lat,
+//                             lng: lng
+//                         },
+//                         map: map,
+//                         animation:google.maps.Animation.Drop,
+//                         title: stations[i].name,
+//                         station_number: stations[i].number
+
+//                     });
+//                     marker.setMap(map);
+
+//                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
+//                     var contentString = stationsInfo;
+//                     // console.log(stationsInfo);
+//                     var infowindow = new google.maps.InfoWindow({
+//                     content: contentString
+//                     })
+
+//                     return function () {
+//                     infowindow.open(map, marker);
+//                     }
+//                     })(marker, i));
+
+
+//                 };
+
+//             // }
+
+//         });
+
+
+//     }
+
+
+// }
+
+
+
+// function showStationMarkers(obj) {
+//         let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+
+//             // if ('stations' in data) {
+
+//                 var dynamicBike = obj.bikeMix;
+
+//                 console.log('stations', dynamicBike);
+//                 for (var i = 0; i < dynamicBike.length; i++) {
+//                     var lat = dynamicBike[i].lat;
+//                     var lng = dynamicBike[i].lng;
+//         var infowindow = new google.maps.InfoWindow();
+
+//                     // stations[i].number + " " +stations[i].name + " "+ stations[i].bike_stands;
+//                     var stationsInfo =  '<div class="info_content">' +
+//         '<p>' + 'station_number:' + dynamicBike[i].number + '</p>' +
+//         '<p>' + 'station_name:'+ dynamicBike[i].name + '</p>' + '<p>' + 'station_bike_stands:'+ dynamicBike[i].bike_stands + '</p>' +
+//                         '</div>';
+//                     // console.log(stationsInfo);
+//                     var station_number = dynamicBike[i].number;
+//                     var marker = new google.maps.Marker({
+//                         position: {
+//                             lat: lat,
+//                             lng: lng
+//                         },
+//                         map: map,
+//                         animation:google.maps.Animation.Drop,
+//                         title: dynamicBike[i].name,
+//                         station_number: dynamicBike[i].number
+
+//                     });
+//                     marker.setMap(map);
+
+//                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
+//                     var contentString = stationsInfo;
+//                     // console.log(stationsInfo);
+//                     var infowindow = new google.maps.InfoWindow({
+//                     content: contentString
+//                     })
+
+//                     return function () {
+//                     infowindow.open(map, marker);
+//                     }
+//                     })(marker, i));
+
+
+//                 };
+
+//             // }
+
+//         });
+
+
+//     }
+
+
+// }
+// http://127.0.0.1:5000/bikeMix"
+    function showStationMarkers() {
+        let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+
+            // if ('stations' in data) {
+
+                var stations = obj.bikeMix;
 
                 console.log('stations', stations);
                 for (var i = 0; i < stations.length; i++) {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
-    var infowindow = new google.maps.InfoWindow();
+        var infowindow = new google.maps.InfoWindow();
 
                     // stations[i].number + " " +stations[i].name + " "+ stations[i].bike_stands;
                     var stationsInfo =  '<div class="info_content">' +
-    '<p>' + 'station_number:' + stations[i].number + '</p>' +
-    '<p>' + 'station_name:'+ stations[i].name + '</p>' + '<p>' + 'station_bike_stands:'+ stations[i].bike_stands + '</p>' +
+        '<p>' + 'station_number:' + stations[i].number + '</p>' +
+        '<p>' + 'station_name:'+ stations[i].name + '</p>' + '<p>' + 'station_bike_stands:'+ stations[i].bike_stands + '</p>' +
+        'available_bike_stands:'+ stations[i].available_bike_stands + '</p>' +    
+        'available_bikes:'+ stations[i].available_bikes + '</p>' +               
                         '</div>';
                     // console.log(stationsInfo);
                     var station_number = stations[i].number;
@@ -82,14 +203,14 @@ function initialize() {
 
                 };
 
-            }
+            // }
 
         });
 
 
     }
 
-
+    showStationMarkers();
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
