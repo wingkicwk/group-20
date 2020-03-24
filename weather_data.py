@@ -96,7 +96,7 @@ def insertWeatherIntoDB():
         conn.commit()
     except:
         # Rollback in case there is any error
-        time.sleep(5 * 60)
+        time.sleep(1 * 60)
         conn.rollback()
 
 
