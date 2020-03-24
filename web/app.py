@@ -66,6 +66,24 @@ def get_dynamicBike():
         dynamicBike.append(dict(number = int(row[0]), status = row[1], available_bike_stands = int(row[2]), available_bikes = int(row[3]), last_update = row[4],now_time= row[5]))
 
     return jsonify(dynamicBike=dynamicBike)
+
+@app.route('/bikeMix')
+def get_bikeMix():
+    conn = connect_to_database()
+
+    cur = conn.cursor()
+    bikeMix = []
+
+    sqlFetchCommand = """SELECT * from bikeMix WHERE (now_time) in (select (max(now_time))from bikeMix);;"""
+    cur.execute(sqlFetchCommand)
+    rows = cur.fetchall()
+
+    for row in rows:
+        bikeMix.append(dict(number = int(row[0]), name = row[1], lat = float(row[2]),lng = float(row[3]),bike_stands = int(row[4]),banking = row[5],available_bike_stands = int(row[6]), available_bikes = int(row[7]), status = row[8],last_update = row[9],now_time= row[10]))
+
+    return jsonify(bikeMix=bikeMix)
+
+
 @app.route('/weather')
 def get_weather():
     conn = connect_to_database()
