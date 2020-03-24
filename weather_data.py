@@ -27,7 +27,7 @@ cur.execute(sql_table)
 
 def insertWeatherIntoDB():
     currentTime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
-    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=ef2f7a40c765b06a8ab8b9c674fe8808'
+    weather_url = 'http://api.openweathermap.org/data/2.5/weather?q=dublin,IE&units=metric&appid=9ca5f328898f13bbd4559a41e958f15a'
     weather_json = requests.get(weather_url).json()
     l = len(weather_json)
 
@@ -95,6 +95,7 @@ def insertWeatherIntoDB():
         conn.commit()
     except:
         # Rollback in case there is any error
+        time.sleep(1 * 60)
         conn.rollback()
 
 
@@ -102,9 +103,11 @@ while True:
     try:
         insertWeatherIntoDB()
         # wait for 5 minutes
-        time.sleep(20*60)
+        time.sleep(5*60)
 
 
     except:
         # print error messages with traceback if error occurs
+
         print(traceback.format_exc())
+        time.sleep(1 * 60)
