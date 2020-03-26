@@ -1,6 +1,9 @@
 from flask import Flask, g, render_template, jsonify
 import configparser
 import time
+from datetime import datetime, date
+import pandas as pd
+
 import requests
 # import json
 import pymysql
@@ -98,5 +101,48 @@ def get_weather():
         weather.append(dict(main = (row[4]), description = row[5], temp = float(row[8]), feels_like = float(row[9]), temp_min =float(row[10]), temp_max =float(row[11]), pressure =int(row[12]), humidity =int(row[13]), visibility =int(row[14]), wind_speed =float(row[15]), wind_deg =row[16], gust =row[17], sunrise =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[23]))), sunset =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[24])))))
 
     return jsonify(weather=weather)
+
+
+@app.route('/dynamic/<number_id>')
+def get_available(number_id):
+
+
+    conn = connect_to_database()
+
+    cur = conn.cursor()
+    bikeMix = []
+
+
+    cur.execute("SELECT * from dynamic_bikeData where number=%s",(number_id))
+    rows = cur.fetchall()
+
+    for row in rows:
+        last_update = row[4]
+        d = datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')
+        weekday = d.weekday()
+        hour = d.hour
+        bikeMix.append(dict(number = int(row[0]), available_bikes = int(row[3]), last_update = row[4],weekday = weekday,hour=hour))
+
+
+    df = pd.DataFrame(bikeMix)
+    means = df['available_bikes'].groupby([df['hour'], df['weekday']]).mean()
+    c_df = pd.DataFrame(means)
+    c_df.reset_index(inplace=True)
+    for i in range(7):
+        c_df[i] = None
+        for index, elem in c_df['weekday'].items():
+
+            if elem == i:
+                c_df.loc[index - elem, i] = c_df.loc[index, 'available_bikes']
+    specical_value = c_df[c_df['weekday'] > 0]
+    c_df = c_df.drop(specical_value.index)
+    c_df = c_df.drop(columns=['weekday', 'available_bikes'])
+    chart_info = c_df.values.tolist()
+
+    return jsonify(chart_info=chart_info)
+
+
+
+
 if __name__ == '__main__':
     app.run(debug =True)
