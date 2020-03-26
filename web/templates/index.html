@@ -35,12 +35,12 @@ function initialize() {
         let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
                 var stations = obj.bikeMix;
-
+// var infowindow = new google.maps.InfoWindow();
                 // console.log('stations', stations);
                 for (var i = 0; i < stations.length; i++) {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
-        var infowindow = new google.maps.InfoWindow();
+        // var infowindow = new google.maps.InfoWindow();
 
                     var stationsInfo =  '<div class="info_content">' +
         '<p>' + 'Station Number:' + stations[i].number + '</p>' +
@@ -63,22 +63,47 @@ function initialize() {
                     });
                     marker.setMap(map);
 
-                    google.maps.event.addListener(marker, 'click', (function (marker, i) {
-                    var contentString = stationsInfo;
-                    var number_id = stations[i].number;
-                    var infowindow = new google.maps.InfoWindow({
-                    content: contentString
-                    })
 
-                    return function () {
-                    infowindow.open(map, marker);
+                    var infowindow  = new google.maps.InfoWindow({
+                        content: ""
+                    });
+                    var pre = false;
+
+            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
+                if(pre){
+                    pre.close();
+                }
+                pre = infowindow;
+                var number_id = stations[i].number;
+                return function() {
+                    pre.setContent(stationsInfo);
+                    pre.open(map, marker);
                     showchart(number_id);
-                    }
-                    })(marker, i));
+                };
+            })(marker,stationsInfo,infowindow));
+//
+//                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
+//
+//                     var contentString = stationsInfo;
+//                     // console.log(contentString);
+//                     var number_id = stations[i].number;
+//                     infowindow = new google.maps.InfoWindow({
+//                     content: contentString
+//                     })
+//
+//                   google.maps.event.addListener(map, "click", function(event) {
+//     infowindow.close();
+//
+// });
+//
+//                     return function () {
+//                     infowindow.open(map, marker);
+//                     showchart(number_id);
+//                     }
+//                     })(marker, i));
 
 
                 };
-
         });
 function showchart(number_id){
 
