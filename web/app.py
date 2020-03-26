@@ -1,7 +1,7 @@
 from flask import Flask, g, render_template, jsonify
 import configparser
 import time
-from datetime import datetime, date
+from datetime import datetime, timedelta
 import pandas as pd
 
 import requests
@@ -112,8 +112,8 @@ def get_available(number_id):
     cur = conn.cursor()
     bikeMix = []
 
-
-    cur.execute("SELECT * from dynamic_bikeData where number=%s",(number_id))
+    week_time = datetime.now() + timedelta(days=-14)
+    cur.execute("SELECT * from dynamic_bikeData where now_time >= %s and number=%s",(week_time, number_id))
     rows = cur.fetchall()
 
     for row in rows:

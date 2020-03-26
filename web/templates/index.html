@@ -4,6 +4,9 @@
     <div style = "text-align: center;">dublin bike</div>
     <!-- <link rel=stylesheet type="text/css" href="index.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+
 <script
 
 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvBNXUTSTxrubQdbSTLWk01GbuAEoq2H0&sensor=false">
@@ -26,6 +29,8 @@ function initialize() {
     });
 
 
+
+
     function showStationMarkers() {
         let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
@@ -40,8 +45,8 @@ function initialize() {
                     var stationsInfo =  '<div class="info_content">' +
         '<p>' + 'Station Number:' + stations[i].number + '</p>' +
         '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +    
-        'Available Bikes:'+ stations[i].available_bikes + '</p>' +               
+        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
+        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
                         '</div>';
 
                     var station_number = stations[i].number;
@@ -60,13 +65,14 @@ function initialize() {
 
                     google.maps.event.addListener(marker, 'click', (function (marker, i) {
                     var contentString = stationsInfo;
-
+                    var number_id = stations[i].number;
                     var infowindow = new google.maps.InfoWindow({
                     content: contentString
                     })
 
                     return function () {
                     infowindow.open(map, marker);
+                    showchart(number_id);
                     }
                     })(marker, i));
 
@@ -74,10 +80,68 @@ function initialize() {
                 };
 
         });
+function showchart(number_id){
 
+        google.charts.load('current', {
+        'packages': ['corechart']
+      });
+
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
+
+     let json = $.getJSON(url, null, function (obj) {
+         var chart_info = obj.chart_info;
+         var arr = [];
+         arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+         console.log('cgart_info', chart_info);
+         for (var i = 0; i < chart_info.length; i++) {
+             var arr1 = [];
+
+            for (var j = 0; j < chart_info[i].length; j++) {
+                if (j==0){
+                    arr1.push(chart_info[i][j]+"");
+                }
+                else{
+                    arr1.push(chart_info[i][j]);
+                }
+
+
+            }
+            console.log('arr1', arr1);
+                arr.push(arr1)
+        }
+
+
+        var data = google.visualization.arrayToDataTable(arr);
+
+        var options = {
+          title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
+
+          hAxis: {
+            title: 'Hour',
+            titleTextStyle: {
+              color: '#333'
+            }
+          },
+          vAxis: {
+            minValue: 0,
+            gridlines: {
+              count: 24,
+            }
+          }
+        };
+
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      });
+      }
 
     }
 
+
+    }
     showStationMarkers();
 }
 
@@ -106,9 +170,9 @@ function stationInfo(){
     let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
     var stations = obj.bikeMix;
-    var stationInfo = "<table border = 1 id='theTable'>"; 
+    var stationInfo = "<table border = 1 id='theTable'>";
     var chosenStation = document.getElementById("dropdown").value;
-    
+
     for (var i = 0; i < stations.length; i++) {
 
         var StationName = stations[i].name;
@@ -125,8 +189,8 @@ function stationInfo(){
             stationInfo += "<tr><td>Total bike stands</td><td>" + bike_stands + "</td></tr>";
             stationInfo += "<tr><td>Available bike stands</td><td>" + available_bike_stands + "</td></tr>";
             stationInfo += "<tr><td>Available bikes</td><td>" + available_bikes + "</td></tr>";
-            
-            
+
+
 
             stationInfo += "</table>"
 
@@ -179,6 +243,7 @@ show_weather();
 <body>
 <h1>Dublin Bike</h1>
 <div id="googleMap" style="width:100%;height:500px; "></div>
+<div id="chart_div" style="width: 100%; height: 500px;"></div>
 <hr>
 <h3>Station Info</h3>
 <select id="dropdown" required></select>
