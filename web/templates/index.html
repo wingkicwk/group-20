@@ -1,6 +1,53 @@
 <html>
 <head>
+    <style>
+        body{
 
+    background: linear-gradient(to right, #ffdde1, #ee9ca7);
+    color:black;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+        #weather{
+        float:right;
+        }
+        googleMap{
+            float: right;
+        }
+        div.chart{
+    height:580px;
+    padding:0 0 10% 0 ;
+}
+div.chart{
+
+
+    float:left;
+    width: 32%;
+    height:auto;
+}
+
+div.chart:hover{
+    border: solid #777
+}
+        table {
+            border: 0px solid #ddd;
+    border-collapse: collapse;
+    width: 20%;
+}
+
+th,
+td {
+    border: 0px solid #ddd;
+    color: white;
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #DDDDDD;
+
+}
+
+tr:hover {
+    background-color: #ccac00;
+}
+    </style>
     <div style = "text-align: center;">dublin bike</div>
     <!-- <link rel=stylesheet type="text/css" href="index.css"> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -78,7 +125,10 @@ function initialize() {
                 return function() {
                     pre.setContent(stationsInfo);
                     pre.open(map, marker);
+                    showchart_week(number_id);
+                    showchart_hour(number_id);
                     showchart(number_id);
+
                 };
             })(marker,stationsInfo,infowindow));
 //
@@ -120,7 +170,7 @@ function showchart(number_id){
          var chart_info = obj.chart_info;
          var arr = [];
          arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-         console.log('cgart_info', chart_info);
+         // console.log('cgart_info', chart_info);
          for (var i = 0; i < chart_info.length; i++) {
              var arr1 = [];
 
@@ -134,7 +184,7 @@ function showchart(number_id){
 
 
             }
-            console.log('arr1', arr1);
+            // console.log('arr1', arr1);
                 arr.push(arr1)
         }
 
@@ -152,9 +202,7 @@ function showchart(number_id){
           },
           vAxis: {
             minValue: 0,
-            gridlines: {
-              count: 24,
-            }
+
           }
         };
 
@@ -164,8 +212,126 @@ function showchart(number_id){
       }
 
     }
+function showchart_week(number_id){
+
+        google.charts.load('current', {
+        'packages': ['corechart']
+      });
+
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var url = 'http://127.0.0.1:5000/dynamic/weekdata/' + number_id;
+
+     let json = $.getJSON(url, null, function (obj) {
+         var chart_info = obj.chart_info;
+         var arr = [];
+         arr.push(['Week', 'Available Bikes']);
+         console.log('cgart_info', chart_info);
+         for (var i = 0; i < chart_info.length; i++) {
+             // var arr1 = [];
+
+             arr.push(chart_info[i]);
+
+                }
 
 
+
+            console.log('arr', arr);
+                // arr.push(arr1);
+
+
+        var data = google.visualization.arrayToDataTable(arr);
+
+        var options = {
+          title: 'Average bikes in use per week',
+
+          hAxis: {
+            title: 'week',
+            titleTextStyle: {
+              color: '#333'
+            }
+          },
+          vAxis: {
+            minValue: 0,
+
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_week'));
+        chart.draw(data, options);
+      });
+      }
+
+    }
+function showchart_hour(number_id){
+
+        google.charts.load('current', {
+        'packages': ['corechart']
+      });
+
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var url = 'http://127.0.0.1:5000/dynamic/hourdata/' + number_id;
+
+     let json = $.getJSON(url, null, function (obj) {
+         var chart_info = obj.chart_info;
+         var arr = [];
+         arr.push(['Hour', 'Available Bikes']);
+         console.log('cgart_info', chart_info);
+          for (var i = 0; i < chart_info.length; i++) {
+             var arr1 = [];
+
+            for (var j = 0; j < chart_info[i].length; j++) {
+                if (j==0){
+                    arr1.push(chart_info[i][j]+"");
+                }
+                else{
+                    arr1.push(chart_info[i][j]);
+                }
+
+
+            }
+            // console.log('arr1', arr1);
+                arr.push(arr1)
+        }
+         // for (var i = 0; i < chart_info.length; i++) {
+         //     // var arr1 = [];
+         //
+         //     arr.push(chart_info[i]);
+         //
+         //        }
+         //
+         //
+         //
+         //    console.log('arr', arr);
+                // arr.push(arr1);
+
+
+        var data = google.visualization.arrayToDataTable(arr);
+
+        var options = {
+          title: 'Average bikes in use per hour',
+
+          hAxis: {
+            title: 'week',
+            titleTextStyle: {
+              color: '#333'
+            }
+          },
+          vAxis: {
+            minValue: 0,
+
+          }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('chart_div_hour'));
+        chart.draw(data, options);
+      });
+      }
+
+    }
     }
     showStationMarkers();
 }
@@ -238,16 +404,14 @@ function show_weather(){
         var feels_like = weather[0].feels_like;
         var gust = weather[0].gust;
         display_info = "<table border = 1 id=\"weatherTable\">";
+            display_info += "<tr><td>feels like</td><td>" + weather[0].feels_like + "</td><td></td><td></td></tr>";
+            display_info += "<tr><td>temperature</td><td>" + weather[0].temp + "</td><td>description</td><td>" + weather[0].description + "</td></tr>";
+            display_info += "<tr><td>min temperature</td><td>" + weather[0].temp_min + "</td><td>pressure</td><td>" + weather[0].pressure + " hpa</td></tr>";
+            display_info += "<tr><td>max temperature</td><td>" + weather[0].temp_max + "</td><td>humidity</td><td>" + weather[0].humidity + "%</td></tr>";
 
-            display_info += "<tr><td>temperature</td><td>" + weather[0].temp + "</td></tr>";
-            display_info += "<tr><td>min temperature</td><td>" + weather[0].temp_min + "</td></tr>";
-            display_info += "<tr><td>max temperature</td><td>" + weather[0].temp_max + "</td></tr>";
-            display_info += "<tr><td>feels like</td><td>" + weather[0].feels_like + "</td></tr>";
-            display_info += "<tr><td>description</td><td>" + weather[0].description + "</td></tr>";
-            display_info += "<tr><td>pressure</td><td>" + weather[0].pressure + " hpa</td></tr>";
-            display_info += "<tr><td>humidity</td><td>" + weather[0].humidity + "%</td></tr>";
-            display_info += "<tr><td>sunrise</td><td>" + weather[0].sunrise + "</td></tr>";
-            display_info += "<tr><td>sunset</td><td>" + weather[0].sunset + "</td></tr>";
+
+            display_info += "<tr><td>sunrise</td><td>" + weather[0].sunrise + "</td><td>sunset</td><td>" + weather[0].sunset + "</td></tr>";
+
 
 
 
@@ -267,16 +431,21 @@ show_weather();
 
 <body>
 <h1>Dublin Bike</h1>
-<div id="googleMap" style="width:100%;height:500px; "></div>
-<div id="chart_div" style="width: 100%; height: 500px;"></div>
+
+<div id="weather" style="width:30%;height:10%; "></div>
+<div id="googleMap" style="width:70%;height:50%; "></div>
+<hr>
+<div class="chart"; id="chart_div_week" style="width: 33%; height: 40%;"></div>
+<div class="chart"; id="chart_div_hour" style="width: 33%; height: 40%;"></div>
+<div class="chart"; id="chart_div" style="width: 33%; height: 40%;"></div>
 <hr>
 <h3>Station Info</h3>
 <select id="dropdown" required></select>
+
 <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button">
 <div id='stationInfo'></div>
 
-<h3>Weather</h3>
-<div id="weather" style="width:100%;height:500px; "></div>
+
 
 </body>
 </html>

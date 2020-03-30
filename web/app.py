@@ -140,7 +140,70 @@ def get_available(number_id):
     chart_info = c_df.values.tolist()
 
     return jsonify(chart_info=chart_info)
+@app.route('/dynamic/weekdata/<number_id>')
+def get_week(number_id):
 
+
+    conn = connect_to_database()
+
+    cur = conn.cursor()
+    bikeMix = []
+
+    week_time = datetime.now() + timedelta(days=-7)
+    cur.execute("SELECT * from dynamic_bikeData where now_time >= %s and number=%s",(week_time, number_id))
+    rows = cur.fetchall()
+
+    for row in rows:
+        last_update = row[4]
+        d = datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')
+        weekday = d.weekday()
+        bikeMix.append(dict(number = int(row[0]), available_bikes = int(row[3]), last_update = row[4],weekday = weekday))
+
+
+    df = pd.DataFrame(bikeMix)
+    means = df['available_bikes'].groupby([df['weekday']]).mean()
+    c_df = pd.DataFrame(means)
+    c_df.reset_index(inplace=True)
+    c_df['weekday'] = c_df['weekday'].replace(0, "Mon")
+    c_df['weekday'] = c_df['weekday'].replace(1, "Tue")
+    c_df['weekday'] = c_df['weekday'].replace(2, "Wed")
+    c_df['weekday'] = c_df['weekday'].replace(3, "Thur")
+    c_df['weekday'] = c_df['weekday'].replace(4, "Fri")
+    c_df['weekday'] = c_df['weekday'].replace(5, "Sat")
+    c_df['weekday'] = c_df['weekday'].replace(6, "Sun")
+    chart_info = c_df.values.tolist()
+
+    return jsonify(chart_info=chart_info)
+@app.route('/dynamic/hourdata/<number_id>')
+def get_hour(number_id):
+
+
+    conn = connect_to_database()
+
+    cur = conn.cursor()
+    bikeMix = []
+
+    week_time = datetime.now() + timedelta(days=-1)
+    cur.execute("SELECT * from dynamic_bikeData where now_time >= %s and number=%s",(week_time, number_id))
+    rows = cur.fetchall()
+
+    for row in rows:
+        last_update = row[4]
+        d = datetime.strptime(last_update, '%Y-%m-%d %H:%M:%S')
+
+        hour = d.hour
+        bikeMix.append(dict(number = int(row[0]), available_bikes = int(row[3]), last_update = row[4],hour=hour))
+
+
+    df = pd.DataFrame(bikeMix)
+    means = df['available_bikes'].groupby([df['hour']]).mean()
+    c_df = pd.DataFrame(means)
+    c_df.reset_index(inplace=True)
+
+
+    chart_info = c_df.values.tolist()
+
+    return jsonify(chart_info=chart_info)
 
 
 
