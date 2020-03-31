@@ -9,7 +9,9 @@ import requests
 import pymysql
 import  json
 config = configparser.ConfigParser()
-app = Flask(__name__, static_url_path='')
+app = Flask(__name__, static_url_path='/static')
+# app1 = Flask(__name__)
+# app1.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 # app.config.from_object('config')
 
 def connect_to_database():
@@ -98,7 +100,7 @@ def get_weather():
     rows = cur.fetchall()
 
     for row in rows:
-        weather.append(dict(main = (row[4]), description = row[5], temp = float(row[8]), feels_like = float(row[9]), temp_min =float(row[10]), temp_max =float(row[11]), pressure =int(row[12]), humidity =int(row[13]), visibility =int(row[14]), wind_speed =float(row[15]), wind_deg =row[16], gust =row[17], sunrise =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[23]))), sunset =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[24])))))
+        weather.append(dict(main = (row[4]), description = row[5],icon = row[6], temp = float(row[8]), feels_like = float(row[9]), temp_min =float(row[10]), temp_max =float(row[11]), pressure =int(row[12]), humidity =int(row[13]), visibility =int(row[14]), wind_speed =float(row[15]), wind_deg =row[16], gust =row[17], sunrise =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[23]))), sunset =time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(int(row[24])))))
 
     return jsonify(weather=weather)
 
