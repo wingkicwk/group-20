@@ -118,7 +118,7 @@ function showchart(number_id){
          var chart_info = obj.chart_info;
          var arr = [];
          arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-         // console.log('cgart_info', chart_info);
+         console.log(arr);
          for (var i = 0; i < chart_info.length; i++) {
              var arr1 = [];
 
@@ -173,6 +173,7 @@ function showchart_week(number_id){
 
      let json = $.getJSON(url, null, function (obj) {
          var chart_info = obj.chart_info;
+         // console.log(chart_info)
          var arr = [];
          arr.push(['Week', 'Available Bikes']);
          console.log('cgart_info', chart_info);
@@ -242,7 +243,8 @@ function showchart_hour(number_id){
 
             }
             // console.log('arr1', arr1);
-                arr.push(arr1)
+                arr.push(arr1);
+              console.log('arr1', arr1);
         }
          // for (var i = 0; i < chart_info.length; i++) {
          //     // var arr1 = [];
@@ -291,7 +293,7 @@ function dropdown(){
     let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
         var stations = obj.bikeMix;
-        var options = "<option value=''>Select a station</option>";
+        var options = "<option value=''>Select a departure</option>";
         for (var i = 0; i < stations.length; i++) {
             var StationName = stations[i].name;
             var number = stations[i].number;
@@ -350,6 +352,85 @@ function MarkerFromDropdown (){
                     var pre = false;
 
             google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
+
+
+                pre = infowindow;
+
+                pre.setContent(stationsInfo);
+                    pre.open(map, marker);
+                    showchart(number );
+                  showchart_week(number );
+                    showchart_hour(number );
+                
+            }) (marker,stationsInfo,infowindow));
+
+    }};
+    });
+    };
+
+function des_dropdown(){
+    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+
+        var stations = obj.bikeMix;
+        var options = "<option value=''>Select a destination</option>";
+        for (var i = 0; i < stations.length; i++) {
+            var StationName = stations[i].name;
+            var number = stations[i].number;
+            options += "<option value ='" + number + "'>" + StationName + "</option>";
+
+
+        }
+        document.getElementById("des_dropdown").innerHTML = options
+
+
+    })
+}
+des_dropdown();
+
+function MarkerFromDropdown_des (){
+    var DDnumber = document.getElementById("des_dropdown").value;
+    console.log(DDnumber);
+    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    var stations = obj.bikeMix;
+    for (var i = 0; i < stations.length; i++) { 
+        var number = stations[i].number;
+        if (number == DDnumber){
+            // console.log("hi")
+            var lat=stations[i].lat;
+            var lng=stations[i].lng;
+
+            var stationsInfo =  '<div class="info_content">' +
+        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
+        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
+        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
+        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
+                        '</div>';
+                        var marker = new google.maps.Marker({
+                        position: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        map: map,
+                       
+                        icon: {
+                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        // scaledSize: new google.maps.Size(50, 50),
+                        },
+                        animation:google.maps.Animation.Drop,
+                        title: stations[i].name,
+                        station_number: stations[i].number
+                    });
+                    marker.setVisible(false);
+                    map.setZoom(15);
+                    map.panTo(marker.position);
+                    marker.setMap(map);
+
+                    var infowindow  = new google.maps.InfoWindow({
+                        content: ""
+                    });
+                    var pre = false;
+
+            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
                 pre = infowindow;
                 pre.setContent(stationsInfo);
                     pre.open(map, marker);
@@ -362,6 +443,88 @@ function MarkerFromDropdown (){
     }};
     });
     };
+
+// window.onload = function ()
+//     {
+//         var year = document.getElementById ("year");
+//         var month = document.getElementById ("month");
+//         var day = document.getElementById ("day");
+//
+//         for ( var i = 2019; i < 2030; i++)
+//         {
+//             var opt = document.createElement("option");
+//             opt.value = i;
+//             opt.innerText = i;
+//             year.appendChild(opt);
+//         }
+//
+//         for ( var i = 1; i < 13; i++)
+//         {
+//             var opt = document.createElement("option");
+//             opt.value = i;
+//             opt.innerText = i;
+//             month.appendChild(opt);
+//         }
+//
+//         for ( var i = 1; i < 32; i++)
+//         {
+//             var opt = document.createElement("option");
+//             opt.value = i;
+//             opt.innerText = i;
+//             day.appendChild(opt);
+//         }
+//     }
+
+
+// function selectyear(){
+//     var startyearlist = "<option value = ''>Year</option>";
+//     for (var i = 2020; i <= 2030; i++){
+//         startyearlist += "<option value = \"" + i + "\">" + i + "</option>";
+//     }
+//     //console.log(startyearlist);
+//     document.getElementById("year").innerHTML = startyearlist;
+// }
+// function selectmonth(){
+//     var startmonthlist = "<option value = ''>Month</option>";
+//     for (var i = 1; i <= 12; i++){
+//         startmonthlist += "<option value = \"" + i + "\">" + i + "</option>";
+//     }
+//     //console.log(startyearlist);
+//     document.getElementById("month").innerHTML = startmonthlist;
+// }
+// function selectday(){
+//     var startdaylist = "<option value = ''>Day</option>";
+//     for (var i = 1; i <= 31; i++){
+//         startdaylist += "<option value = \"" + i + "\">" + i + "</option>";
+//     }
+//     //console.log(startyearlist);
+//     document.getElementById("day").innerHTML = startdaylist;
+// }
+// function selecthour(){
+//     var starthourlist = "<option value = ''>Hour</option>";
+//     for (var i = 0; i <=24 ; i++){
+//         starthourlist += "<option value = \"" + i + "\">" + i + "</option>";
+//     }
+//     //console.log(startyearlist);
+//     document.getElementById("hour").innerHTML = starthourlist;
+// // }
+//
+// window.onload=function(){
+//     selectyear();
+//     selectmonth();
+//     selectday();
+//     selecthour()
+// }
+
+
+
+
+
+
+
+
+
+
 
 
     function showchart(number_id){
@@ -588,7 +751,132 @@ show_weather();
         
     <select id="dropdown" required onchange="return MarkerFromDropdown();"></select>
     <!-- <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button"> -->
+    <select id="des_dropdown" style="font-size: 15px;" required onchange="return MarkerFromDropdown_des();"></select>
+    <br><br>
+<!--    <select id="year"></select>-->
+<!--    <select id="month"></select>-->
+<!--    <select id="day"></select>-->
+<!--    <select id="hour"></select>-->
+
+
+    <form name="date">
+  <select name="year" οnchange="selectYear(this.value)">
+    <option value="">Select Year</option>
+  </select>
+  <select name="month" οnchange="selectMonth(this.value)">
+    <option value="">Select Month</option>
+  </select>
+  <select name="day">
+    <option value="">Select Day</option>
+  </select>
+  <select id = "hour">bbb</select>
+</form>
+
+<script language="JavaScript">
+   function dateStart()
+   {
+       //月份对应天数
+       MonHead = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+       //给年下拉框赋内容
+       var y  = new Date().getFullYear();
+       for (var i = (y-50); i < (y+50); i++) //以今年为准，前50年，后50年
+           document.date.year.options.add(new Option(" "+ i +" Year", i));
+
+       //给月下拉框赋内容
+       for (var i = 1; i < 13; i++)
+           document.date.month.options.add(new Option(" " + i + " Month", i));
+
+       document.date.year.value = y;
+       document.date.month.value = new Date().getMonth() + 1;
+       var n = MonHead[new Date().getMonth()];
+       if (  new Date().getMonth() ==1 && IsPinYear(yearvalue)  )
+           n++;
+       writeDay(n); //赋日期下拉框
+       // writeHour();
+
+       document.date.day.value = new Date().getDate();
+   }
+
+   if(document.attachEvent)
+       window.attachEvent("onload", dateStart);
+   else
+       window.addEventListener('load', dateStart, false);
+
+   function selectYear(str) //年发生变化时日期发生变化(主要是判断闰平年)
+   {
+       var monthvalue = document.date.month.options[document.date.month.selectedIndex].value;
+       if (monthvalue == "")
+       {
+           var e = document.date.day;
+           optionsClear(e);
+           return;
+       }
+       var n = MonHead[monthvalue - 1];
+       if (  monthvalue ==2 && IsPinYear(str)  )
+           n++;
+       writeDay(n);
+   }
+
+   function selectMonth(str)   //月发生变化时日期联动
+   {
+        var yearvalue = document.date.year.options[document.date.year.selectedIndex].value;
+        if (yearvalue == "")
+        {
+            var e = document.date.day;
+            optionsClear(e);
+            return;
+        }
+        var n = MonHead[str - 1];
+        if (  str ==2 && IsPinYear(yearvalue)  )
+            n++;
+            writeDay(n);
+        }
+
+   function writeDay(n)   //据条件写日期的下拉框
+   {
+       var e = document.date.day; optionsClear(e);
+       for (var i=1; i<(n+1); i++)
+           e.options.add(new Option(" "+ i + " Day", i));
+   }
+
+   function writeHour(){
+    var starthourlist = "<option value = ''>Hour</option>";
+    for (var i = 0; i <=24 ; i++){
+        starthourlist += "<option value = \"" + i + "\">" + i + ':00'+ "</option>";
+    }
+    //console.log(startyearlist);
+    document.getElementById("hour").innerHTML = starthourlist;
+}
+
+
+
+   function IsPinYear(year)//判断是否闰平年
+   {
+       return(  0 == year%4 && ( year%100 !=0 || year%400 == 0 )  );
+   }
+
+   function optionsClear(e)
+   {
+       e.options.length = 1;
+   }
+window.onload=function(){
+
+    writeHour();
+}
+</script>
 </div>
+
+
+
+
+
+
+
+
+
+
+
 <div id="googleMap" ></div>
 
 <!-- <div id="googleMap" style="width:70%;height:50%; "></div> -->
