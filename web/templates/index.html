@@ -841,7 +841,10 @@ show_weather();
    }
 
    function writeHour(){
-    var starthourlist = "<option value = ''>Hour</option>";
+       var myDate = new Date();
+       var hour = myDate.getHours();
+       // console.log(hour);
+    var starthourlist = "<option value = ''>" +   hour +":00"+ "</option>";
     for (var i = 0; i <=24 ; i++){
         starthourlist += "<option value = \"" + i + "\">" + i + ':00'+ "</option>";
     }
