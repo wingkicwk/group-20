@@ -8,7 +8,9 @@ import requests
 # import json
 import pymysql
 import  json
-config = configparser.ConfigParser()
+
+
+
 app = Flask(__name__, static_url_path='/static')
 # app1 = Flask(__name__)
 # app1.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -41,6 +43,25 @@ def get_db():
 @app.route('/')
 def root():
     return render_template('index.html')
+
+
+@app.route('/<FromStation>/<int:unixTime>/<ToStation>/<int:ToTime>')
+def prediction(unixTime,Station,dropOffStation,dropOffTime):
+
+    From_availableBikes = predict.predictFutureBikes(FromStation,unixTime)
+
+    To_availableBikes = predict.predictFutureBikes(ToStation,ToTime)
+
+    DateTime = datetime.datetime.utcfromtimestamp(unixTime) #convert unixTime into datetime object
+    
+    DayOfWeek = Time.today().weekday()
+    DateTime = Time.strftime("%m/%d/%Y, %H:%M:%S") #convert datetime object into string for webpage
+    
+    return jsonify(FromStation,From_availableBikes, ToStation,To_availableBikes,DateTime,DayOfWeek)
+
+
+
+
 @app.route('/stations')
 def get_stations():
     conn = connect_to_database()

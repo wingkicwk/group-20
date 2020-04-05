@@ -103,6 +103,7 @@ function initialize() {
 
                 };
         });
+
 function showchart(number_id){
 
         google.charts.load('current', {
@@ -307,6 +308,25 @@ function dropdown(){
     })
 }
 dropdown();
+
+
+
+
+function showResult(obj){
+
+  var FromStation=obj[0]
+  var From_availableBikes=obj[1][0]
+  var ToStation=obj[2]
+  var To_availableBikes=obj[3][1]
+  document.getElementById('results').innerHTML = "Our model is showing there will be " + From_availableBikes
+  + "bikes availableat pick up station: " +FromStation + "on" + DateTime+ "at" + DayOfWeek +"<br>"+"and" +
+  To_availableBikes+ "bike stands available at drop off station: " +ToStation
+
+}
+
+
+
+
 
 function MarkerFromDropdown (){
     var DDnumber = document.getElementById("dropdown").value;
@@ -737,6 +757,9 @@ function show_weather(){
 });
 }
 show_weather();
+function showPredict(){
+              document.getElementById('results').style.display = 'inline-block';
+          }
 </script>
 
 </head>
@@ -753,13 +776,8 @@ show_weather();
     <!-- <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button"> -->
     <select id="des_dropdown" style="font-size: 15px;" required onchange="return MarkerFromDropdown_des();"></select>
     <br><br>
-<!--    <select id="year"></select>-->
-<!--    <select id="month"></select>-->
-<!--    <select id="day"></select>-->
-<!--    <select id="hour"></select>-->
 
-
-    <form name="date">
+    <form name="date" method="post">
   <select name="year" οnchange="selectYear(this.value)">
     <option value="">Select Year</option>
   </select>
@@ -770,9 +788,12 @@ show_weather();
     <option value="">Select Day</option>
   </select>
   <select id = "hour">bbb</select>
+  <!-- <input id="click" type='submit' onclick="showPredict()"> -->
 </form>
+<div id='results'></div>
 
 <script language="JavaScript">
+
    function dateStart()
    {
        //月份对应天数
@@ -869,15 +890,6 @@ window.onload=function(){
 }
 </script>
 </div>
-
-
-
-
-
-
-
-
-
 
 
 <div id="googleMap" ></div>
