@@ -48,16 +48,23 @@ def root():
 @app.route('/<FromStation>/<int:unixTime>/<ToStation>/<int:ToTime>')
 def prediction(unixTime,FromStation,ToStation,ToTime):
 
-    From_availableBikes = predict.predictFutureBikes(FromStation,unixTime)
+    From_availableBikes = predict.predictFutureBikes(int(FromStation),unixTime)
 
-    To_availableBikes = predict.predictFutureBikes(ToStation,ToTime)
+    To_availableBikes = predict.predictFutureBikes(int(ToStation),ToTime)
 
-    DateTime = datetime.datetime.utcfromtimestamp(unixTime) #convert unixTime into datetime object
+    From_DTime = datetime.utcfromtimestamp(unixTime) 
     
-    DayOfWeek = Time.today().weekday()
-    DateTime = Time.strftime("%m/%d/%Y, %H:%M:%S") #convert datetime object into string for webpage
+    To_DTime = datetime.utcfromtimestamp(unixTime)
+
+    From_DayOfWeek = From_DTime.today().weekday()
+
+    To_DayOfWeek = To_DTime.today().weekday()
+
+    From_DTime = From_DTime.strftime("%m/%d/%Y, %H:%M:%S") 
+
+    To_DTime = To_DTime.strftime("%m/%d/%Y, %H:%M:%S") 
     
-    return jsonify(FromStation,From_availableBikes, ToStation,To_availableBikes,DateTime,DayOfWeek)
+    return jsonify(FromStation,From_availableBikes, ToStation,To_availableBikes,From_DTime,From_DayOfWeek,To_DTime,To_DayOfWeek)
 
 
 

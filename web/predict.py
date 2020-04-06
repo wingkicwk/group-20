@@ -69,11 +69,6 @@ def predictFutureBikes(stationNumber,unixTime):
        'hour_23', 'weekday_0', 'weekday_1', 'weekday_2', 'weekday_3',
        'weekday_4', 'weekday_5', 'weekday_6'])
 
-
-
-        
- 
-
     outfile = re.sub("['/()]", '', str(stationNumber))
     outfile = outfile.replace(" ","")
     #generate file path to load model
@@ -88,9 +83,9 @@ def predictFutureBikes(stationNumber,unixTime):
     prediction = multiple_linreg.predict(df)
     RoundedPrediction=int(np.round(prediction))
     bikeStands=NumberAndStandPairs[stationNumber]
-    
-    result=bikeStands-RoundedPrediction
+    AvabikeStands=bikeStands-RoundedPrediction
 
+    result=(RoundedPrediction,AvabikeStands)
     return result
 
 

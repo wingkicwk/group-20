@@ -88,7 +88,7 @@ function display_time(){
 
                 var pre_info = obj.pre_info;
                 console.log(pre_info);
-         // displayChart(data);
+                showResult(obj)
             });
 }
 
@@ -383,16 +383,73 @@ dropdown();
 
 function showResult(obj){
 
-  var FromStation=obj[0]
-  var From_availableBikes=obj[1][0]
-  var ToStation=obj[2]
-  var To_availableBikes=obj[3][1]
+  var FromStation=obj[0];
+  var From_availableBikes=obj[1][0];
+  var ToStation=obj[2];
+  var To_availableBikeStands=obj[3][1];
+  var From_DTime=obj[4];
+
+  var From_DayOfWeek=[5];
+  if (From_DayOfWeek==0){
+    From_DayOfWeek="Monday";
+  }else if (From_DayOfWeek==1){
+    From_DayOfWeek="Tuesday";
+  }else if (From_DayOfWeek==2){
+    From_DayOfWeek="Wednesday";
+  }else if (From_DayOfWeek==3){
+    From_DayOfWeek="Thursday";
+  }else if (From_DayOfWeek==4){
+    From_DayOfWeek="Friday";
+  }else if (From_DayOfWeek==5){
+    From_DayOfWeek="Sataurday";
+  }else if (From_DayOfWeek==6){
+    From_DayOfWeek="Sunday";
+  };
+  
+
+  var To_DTime=obj[6];
+
+  var To_DayOfWeek=obj[7];
+
+  if (To_DayOfWeek==0){
+    To_DayOfWeek="Monday";
+  }else if (To_DayOfWeek==1){
+    To_DayOfWeek="Tuesday";
+  }else if (To_DayOfWeek==2){
+    To_DayOfWeek="Wednesday";
+  }else if (To_DayOfWeek==3){
+    To_DayOfWeek="Thursday";
+  }else if (To_DayOfWeek==4){
+    To_DayOfWeek="Friday";
+  }else if (To_DayOfWeek==5){
+    To_DayOfWeek="Sataurday";
+  }else if (To_DayOfWeek==6){
+    To_DayOfWeek="Sunday";
+  };
+
+  let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (data) {
+
+    var stations = data.bikeMix;
+    var FromStationName;
+    var ToStationName;
+        for (var i = 0; i < stations.length; i++) {
+            var StationName = stations[i].name;
+            var number = stations[i].number;
+            if (number == FromStation){
+              FromStationName=StationName;}
+              if (number == ToStation){
+                ToStationName=StationName;}              
+
+
+        }
+
   document.getElementById('results').innerHTML = "Our model is showing there will be " + From_availableBikes
-  + "bikes availableat pick up station: " +FromStation + "on" + DateTime+ "at" + DayOfWeek +"<br>"+"and" +
-  To_availableBikes+ "bike stands available at drop off station: " +ToStation
+  + " bikes available at pick up station: " +FromStationName + " on " + From_DayOfWeek+ " at " + From_DTime +"<br>"+" and " +
+  To_availableBikeStands+ " bike stands available at drop off station: " +ToStationName+" on " + To_DayOfWeek+ " at " + To_DTime +"."
 
+
+})
 }
-
 
 
 
@@ -806,9 +863,9 @@ function show_weather(){
 });
 }
 show_weather();
-function showPredict(){
-              document.getElementById('results').style.display = 'inline-block';
-          }
+// function showPredict(){
+//               document.getElementById('results').style.display = 'inline-block';
+//           }
 </script>
 
 </head>
@@ -845,7 +902,7 @@ function showPredict(){
   <select id = "hour">bbb</select>
   <!-- <input id="click" type='submit' onclick="showPredict()"> -->
 </form>
-<div id='results'></div>
+
 
 <script language="JavaScript">
 
@@ -970,6 +1027,8 @@ window.onload=function(){
 </div>
 <input type="submit" class="btn btn-lg"  value="Submit" onclick="display_time()"></div>
 
+
+<div style="background-color:#F8F3F6; padding-bottom: 30px; " id='results'></div>
 <hr>
 </body>
 </html>
