@@ -37,12 +37,6 @@ def connect_to_database():
     return conn
 
 
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db.close()
-
-
 def Model(stationNumber):
 
     conn = connect_to_database()
@@ -174,13 +168,6 @@ def Model(stationNumber):
 
     with open(outfile,'wb') as handle:
         pickle.dump(multiple_linreg,handle,pickle.HIGHEST_PROTOCOL)
-
-
-
-
-
-
-
 
 def AllModels():
 

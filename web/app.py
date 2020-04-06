@@ -8,7 +8,7 @@ import requests
 # import json
 import pymysql
 import  json
-
+import predict
 
 
 app = Flask(__name__, static_url_path='/static')
@@ -46,7 +46,7 @@ def root():
 
 
 @app.route('/<FromStation>/<int:unixTime>/<ToStation>/<int:ToTime>')
-def prediction(unixTime,Station,dropOffStation,dropOffTime):
+def prediction(unixTime,FromStation,ToStation,ToTime):
 
     From_availableBikes = predict.predictFutureBikes(FromStation,unixTime)
 
