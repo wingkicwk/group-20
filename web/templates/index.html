@@ -89,6 +89,7 @@ function display_time(){
                 var pre_info = obj.pre_info;
                 console.log(pre_info);
                 showResult(obj)
+                drawPredictChart(obj)
             });
 }
 
@@ -384,12 +385,12 @@ dropdown();
 function showResult(obj){
 
   var FromStation=obj[0];
-  var From_availableBikes=obj[1][0];
+  var From_availableBikes=obj[6][0];
   var ToStation=obj[2];
-  var To_availableBikeStands=obj[3][1];
-  var From_DTime=obj[4];
+  var To_availableBikeStands=obj[14][1];
+  var From_DTime=obj[2];
 
-  var From_DayOfWeek=[5];
+  var From_DayOfWeek=[3];
   if (From_DayOfWeek==0){
     From_DayOfWeek="Monday";
   }else if (From_DayOfWeek==1){
@@ -407,9 +408,9 @@ function showResult(obj){
   };
   
 
-  var To_DTime=obj[6];
+  var To_DTime=obj[4];
 
-  var To_DayOfWeek=obj[7];
+  var To_DayOfWeek=obj[5];
 
   if (To_DayOfWeek==0){
     To_DayOfWeek="Monday";
@@ -451,8 +452,108 @@ function showResult(obj){
 })
 }
 
+function drawPredictChart(obj) {
+
+  var From_availableBikes = obj[7][0];
+  var From_availableBikesSub1h = obj[8][0];
+  var From_availableBikesSub2h = obj[9][0];
+  var From_availableBikesSub3h = obj[10][0];
+
+  var From_availableBikesPlus1h = obj[11][0];
+  var From_availableBikesPlus2h = obj[12][0];
+  var From_availableBikesPlus3h = obj[13][0];
+
+  var To_availableBikes = obj[14][1];
+  var To_availableBikesSub1h = obj[15][1];
+  var To_availableBikesSub2h = obj[16][1];
+  var To_availableBikesSub3h = obj[17][1];
+
+  var To_availableBikesPlus1h = obj[18][1];
+  var To_availableBikesPlus2h = obj[19][1];
+  var To_availableBikesPlus3h = obj[20][1];
+
+  var FromHour = obj[20];
+  FromHour = parseInt(FromHour)+1;
+
+  var ToHour = obj[21];
+  FromHour = parseInt(FromHour)+1;
+
+  google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+  google.charts.setOnLoadCallback(drawFromChart);
+  google.charts.setOnLoadCallback(drawToChart);
+
+  function drawToChart() {
+      var ToData = google.visualization.arrayToDataTable([
+          ['Hour', 'Available Bikes'],
+          ['1h-', To_availableBikesSub1h],
+          ['2h-', To_availableBikesSub2h],
+          ['3h-', To_availableBikesSub3h],
+          [FromHour, From_availableBikes],
+          ['1h+', To_availableBikesPlus1h],
+          ['2h+', To_availableBikesPlus2h],
+          ['3h+', To_availableBikesPlus3h],
+
+      ]);
 
 
+  var options = {
+    title: 'Bikes stands available at drop off station',
+
+    hAxis: {
+      title: 'Time',
+      titleTextStyle: {
+        color: '#333'
+      }
+    },
+    vAxis: {
+      minValue: 0,
+
+    }
+  };
+
+var chart = new google.visualization.LineChart(document.getElementById('chart_div_predictTo'));
+chart.draw(ToData, options);
+
+}
+
+
+
+  function drawFromChart() {
+      var FromData = google.visualization.arrayToDataTable([
+          ['Hour', 'Available Bikes'],
+          ['1h-', From_availableBikesSub1h],
+          ['2h-', From_availableBikesSub2h],
+          ['3h-', From_availableBikesSub3h],
+          [FromHour, From_availableBikes],
+          ['1h+', From_availableBikesPlus1h],
+          ['2h+', From_availableBikesPlus2h],
+          ['3h+', From_availableBikesPlus3h],
+
+      ]);
+
+
+  var options = {
+    title: 'Bikes available at pick up station',
+
+    hAxis: {
+      title: 'Time',
+      titleTextStyle: {
+        color: '#333'
+      }
+    },
+    vAxis: {
+      minValue: 0,
+
+    }
+  };
+
+var chart = new google.visualization.LineChart(document.getElementById('chart_div_predictFrom'));
+chart.draw(FromData, options);
+
+}
+};
 
 function MarkerFromDropdown (){
     var DDnumber = document.getElementById("dropdown").value;
@@ -795,18 +896,6 @@ let json = $.getJSON(url, null, function (obj) {
     // console.log('arr1', arr1);
         arr.push(arr1)
 }
- // for (var i = 0; i < chart_info.length; i++) {
- //     // var arr1 = [];
- //
- //     arr.push(chart_info[i]);
- //
- //        }
- //
- //
- //
- //    console.log('arr', arr);
-        // arr.push(arr1);
-
 
 var data = google.visualization.arrayToDataTable(arr);
 
@@ -1016,6 +1105,8 @@ window.onload=function(){
 <div class="chart"; id="chart_div_hour" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_2" style="width: 33%; height: 40%;">hhhhhh</div>
+<div class="chart"; id="chart_div_predictFrom" style="width: 33%; height: 40%;"></div>
+<div class="chart"; id="chart_div_predictTo" style="width: 33%; height: 40%;"></div>
 </div>
 
 <div class="col-sm-6">

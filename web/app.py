@@ -48,25 +48,60 @@ def root():
 @app.route('/<FromStation>/<int:unixTime>/<ToStation>/<int:ToTime>')
 def prediction(unixTime,FromStation,ToStation,ToTime):
 
-    From_availableBikes = predict.predictFutureBikes(int(FromStation),unixTime)
-
-    To_availableBikes = predict.predictFutureBikes(int(ToStation),ToTime)
-
     From_DTime = datetime.utcfromtimestamp(unixTime) 
     
     To_DTime = datetime.utcfromtimestamp(unixTime)
+
+    FromTimeSub1h = unixTime - 3600
+    FromTimeSub2h = unixTime - 3600*2
+    FromTimeSub3h = unixTime - 3600*3
+
+    FromTimePlus1h = unixTime + 3600
+    FromTimePlus2h = unixTime + 3600*2
+    FromTimePlus3h = unixTime + 3600*3
+
+    ToTimeSub1h = unixTime - 3600
+    ToTimeSub2h = unixTime - 3600*2
+    ToTimeSub3h = unixTime - 3600*3
+
+    ToTimePlus1h = unixTime + 3600
+    ToTimePlus2h = unixTime + 3600*2
+    ToTimePlus3h = unixTime + 3600*3
+
+    From_availableBikes = predict.predictFutureBikes(int(FromStation),unixTime)
+    To_availableBikes = predict.predictFutureBikes(int(ToStation),ToTime)
+
+    From_availableBikesSub1h = predict.predictFutureBikes(int(FromStation),FromTimeSub1h)
+    From_availableBikesSub2h = predict.predictFutureBikes(int(FromStation),FromTimeSub2h)
+    From_availableBikesSub3h = predict.predictFutureBikes(int(FromStation),FromTimeSub3h)
+
+    From_availableBikesPlus1h = predict.predictFutureBikes(int(FromStation),FromTimePlus1h)
+    From_availableBikesPlus2h = predict.predictFutureBikes(int(FromStation),FromTimePlus2h)
+    From_availableBikesPlus3h = predict.predictFutureBikes(int(FromStation),FromTimePlus3h)
+
+    To_availableBikesSub1h = predict.predictFutureBikes(int(ToStation),ToTimeSub1h)
+    To_availableBikesSub2h = predict.predictFutureBikes(int(ToStation),ToTimeSub2h)
+    To_availableBikesSub3h = predict.predictFutureBikes(int(ToStation),ToTimeSub3h)
+
+    To_availableBikesPlus1h = predict.predictFutureBikes(int(ToStation),ToTimePlus1h)
+    To_availableBikesPlus2h = predict.predictFutureBikes(int(ToStation),ToTimePlus2h)
+    To_availableBikesPlus3h = predict.predictFutureBikes(int(ToStation),ToTimePlus3h)
 
     From_DayOfWeek = From_DTime.today().weekday()
 
     To_DayOfWeek = To_DTime.today().weekday()
 
+    From_DTime_Hour = From_DTime.strftime("%H") 
     From_DTime = From_DTime.strftime("%m/%d/%Y, %H:%M:%S") 
 
+    To_DTime_Hour = To_DTime.strftime("%H") 
     To_DTime = To_DTime.strftime("%m/%d/%Y, %H:%M:%S") 
     
-    return jsonify(FromStation,From_availableBikes, ToStation,To_availableBikes,From_DTime,From_DayOfWeek,To_DTime,To_DayOfWeek)
-
-
+    return jsonify(FromStation, ToStation,From_DTime,From_DayOfWeek,To_DTime,To_DayOfWeek,From_availableBikes,
+    From_availableBikesSub1h,From_availableBikesSub2h,From_availableBikesSub3h,From_availableBikesPlus1h,From_availableBikesPlus2h,
+    From_availableBikesPlus3h,To_availableBikes,To_availableBikesSub1h,To_availableBikesSub2h,To_availableBikesSub3h,To_availableBikesPlus1h,
+    To_availableBikesPlus2h,To_availableBikesPlus3h,From_DTime_Hour,To_DTime_Hour
+    )
 
 
 @app.route('/stations')
