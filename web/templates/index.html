@@ -25,47 +25,38 @@ h1{
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-
-
     <link type="text/css" rel=stylesheet href="{{ url_for('static',filename='index.css')}}">
-
-
-
     </head>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvBNXUTSTxrubQdbSTLWk01GbuAEoq2H0&sensor=false"></script>
 
 <script>
 
+// create the dropdown list for time
 var todayDate = new Date().getDate();
 $(function() {
     $('#datetime_1').datetimepicker({
                 minDate: new Date(),
-                maxDate: new Date(new Date().setDate(todayDate + 30)),
-                disabledTimeIntervals: [moment({
-                    h: 0,
-                    m: 30
-                }), moment({
-                    h: 5
-                })],
-                stepping: 30
+                maxDate: new Date(new Date().setDate(todayDate + 4)),
+                format: 'YYYY-MM-DD HH:mm',
+
+                stepping: 30,
+                sideBySide: true,
             });
     $('#datetime_2').datetimepicker({
                 minDate: new Date(),
-                disabledTimeIntervals: [moment({
-                    h: 0,
-                    m: 30
-                }), moment({
-                    h: 5
-                })],
-                stepping: 30
+                format: 'YYYY-MM-DD HH:mm',
+
+                stepping: 30,
+                sideBySide: true,
             });
     $("#datetime_1").on("dp.change", function(e) {
                 $('#datetime_2').data("DateTimePicker").minDate(e.date);
                 $('#datetime_2').data("DateTimePicker").date(e.date)
             });
-});
+    });
 
+//get the time and station form the user selection
 function display_time(){
      var selecttime1 = $('#datetime_1').data("DateTimePicker").date();
      var selecttime2 = $('#datetime_2').data("DateTimePicker").date();
@@ -85,7 +76,6 @@ function display_time(){
 
      var url = 'http://127.0.0.1:5000/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
      let json = $.getJSON(url, null, function(obj) {
-
                 var pre_info = obj.pre_info;
                 console.log(pre_info);
                 showResult(obj)
@@ -94,9 +84,7 @@ function display_time(){
 }
 
 
-
-
-
+//show the map things
 var myCenter=new google.maps.LatLng(53.350140, -6.266155);
 var map;
 var mapProp;
@@ -107,11 +95,9 @@ function initialize() {
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
     map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
     var marker = new google.maps.Marker({
         position: myCenter,
     });
-
 
 
 
@@ -119,19 +105,17 @@ function initialize() {
         let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
                 var stations = obj.bikeMix;
-// var infowindow = new google.maps.InfoWindow();
-                // console.log('stations', stations);
                 for (var i = 0; i < stations.length; i++) {
                     var lat = stations[i].lat;
                     var lng = stations[i].lng;
-        // var infowindow = new google.maps.InfoWindow();
+
 
                     var stationsInfo =  '<div class="info_content">' +
-        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
-        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
-        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
-                        '</div>';
+                        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
+                        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
+                        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
+                        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
+                                        '</div>';
 
                     var station_number = stations[i].number;
                     var marker = new google.maps.Marker({
@@ -143,7 +127,6 @@ function initialize() {
                         animation:google.maps.Animation.Drop,
                         title: stations[i].name,
                         station_number: stations[i].number
-
                     });
                     marker.setMap(map);
 
@@ -153,62 +136,53 @@ function initialize() {
                     });
                     var pre = false;
 
-            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
-                if(pre){
-                    pre.close();
-                }
-                pre = infowindow;
-                var number_id = stations[i].number;
-                return function() {
-                    pre.setContent(stationsInfo);
-                    pre.open(map, marker);
-                    showchart_week(number_id);
-                    showchart_hour(number_id);
-                    showchart(number_id);
-
-                };
-            })(marker,stationsInfo,infowindow));
-
-
-
-                };
+                google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
+                    if(pre){
+                        pre.close();
+                    }
+                    pre = infowindow;
+                    var number_id = stations[i].number;
+                    return function() {
+                        pre.setContent(stationsInfo);
+                        pre.open(map, marker);
+                        showchart_week(number_id);
+                        showchart_hour(number_id);
+                        showchart(number_id);
+                    };
+                })(marker,stationsInfo,infowindow));
+             };
         });
 
 function showchart(number_id){
 
-        google.charts.load('current', {
-        'packages': ['corechart']
-      });
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
 
-      google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+             var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
 
-      function drawChart() {
-          var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
+             let json = $.getJSON(url, null, function (obj) {
+                 var chart_info = obj.chart_info;
+                 var arr = [];
+                 arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+                 console.log(arr);
+                 for (var i = 0; i < chart_info.length; i++) {
+                     var arr1 = [];
 
-     let json = $.getJSON(url, null, function (obj) {
-         var chart_info = obj.chart_info;
-         var arr = [];
-         arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-         console.log(arr);
-         for (var i = 0; i < chart_info.length; i++) {
-             var arr1 = [];
-
-            for (var j = 0; j < chart_info[i].length; j++) {
-                if (j==0){
-                    arr1.push(chart_info[i][j]+"");
+                    for (var j = 0; j < chart_info[i].length; j++) {
+                        if (j==0){
+                            arr1.push(chart_info[i][j]+"");
+                        }
+                        else{
+                            arr1.push(chart_info[i][j]);
+                        }
+                    }
+                    // console.log('arr1', arr1);
+                     arr.push(arr1)
                 }
-                else{
-                    arr1.push(chart_info[i][j]);
-                }
 
 
-            }
-            // console.log('arr1', arr1);
-                arr.push(arr1)
-        }
-
-
-        var data = google.visualization.arrayToDataTable(arr);
+            var data = google.visualization.arrayToDataTable(arr);
 
         var options = {
           title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
@@ -219,18 +193,16 @@ function showchart(number_id){
               color: '#333'
             }
           },
-          vAxis: {
+            vAxis: {
             minValue: 0,
-
-          }
-        };
+            }
+           };
 
         var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
-      });
-      }
-
-    }
+            chart.draw(data, options);
+             });
+            }
+        }
 function showchart_week(number_id){
 
         google.charts.load('current', {
@@ -396,7 +368,7 @@ function showResult(obj){
   }else if (From_DayOfWeek==6){
     From_DayOfWeek="Sunday";
   };
-  
+
 
   var To_DTime=obj[4];
 
@@ -426,10 +398,10 @@ function showResult(obj){
         for (var i = 0; i < stations.length; i++) {
             var StationName = stations[i].name;
             var number = stations[i].number;
-            if (number == FromStation){
+            if (number == FromStation){
               FromStationName=StationName;}
-              if (number == ToStation){
-                ToStationName=StationName;}              
+              if (number == ToStation){
+                ToStationName=StationName;}
 
 
         }
@@ -545,65 +517,65 @@ chart.draw(FromData, options);
 }
 };
 
-function MarkerFromDropdown (){
-    var DDnumber = document.getElementById("dropdown").value;
+function MarkerFromDropdown (){
+    var DDnumber = document.getElementById("dropdown").value;
     console.log(DDnumber);
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
-    var stations = obj.bikeMix;
-    for (var i = 0; i < stations.length; i++) { 
-        var number = stations[i].number;
-        if (number == DDnumber){
-            // console.log("hi")
-            var lat=stations[i].lat;
-            var lng=stations[i].lng;
+    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    var stations = obj.bikeMix;
+    for (var i = 0; i < stations.length; i++) {
+        var number = stations[i].number;
+        if (number == DDnumber){
+            // console.log("hi")
+            var lat=stations[i].lat;
+            var lng=stations[i].lng;
 
-            var stationsInfo =  '<div class="info_content">' +
-        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
-        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
-        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
-                        '</div>';
-                        var marker = new google.maps.Marker({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-                       
-                        icon: {
-                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                        // scaledSize: new google.maps.Size(50, 50),
-                        },
-                        animation:google.maps.Animation.Drop,
-                        title: stations[i].name,
-                        station_number: stations[i].number
-                    });
-                    marker.setVisible(false);
-                    map.setZoom(15);
-                    map.panTo(marker.position);
-                    marker.setMap(map);
+            var stationsInfo =  '<div class="info_content">' +
+        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
+        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
+        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
+        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
+                        '</div>';
+                        var marker = new google.maps.Marker({
+                        position: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        map: map,
 
-                    var infowindow  = new google.maps.InfoWindow({
-                        content: ""
-                    });
-                    var pre = false;
+                        icon: {
+                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        // scaledSize: new google.maps.Size(50, 50),
+                        },
+                        animation:google.maps.Animation.Drop,
+                        title: stations[i].name,
+                        station_number: stations[i].number
+                    });
+                    marker.setVisible(false);
+                    map.setZoom(15);
+                    map.panTo(marker.position);
+                    marker.setMap(map);
 
-            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
+                    var infowindow  = new google.maps.InfoWindow({
+                        content: ""
+                    });
+                    var pre = false;
+
+            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
 
 
-                pre = infowindow;
+                pre = infowindow;
                 var number_id = stations[i].number;
-                pre.setContent(stationsInfo);
-                    pre.open(map, marker);
-                    showchart(number_id );
-                  showchart_week(number_id );
-                    showchart_hour(number_id );
-                
-            }) (marker,stationsInfo,infowindow));
+                pre.setContent(stationsInfo);
+                    pre.open(map, marker);
+                    showchart(number_id );
+                  showchart_week(number_id );
+                    showchart_hour(number_id );
 
-    }};
-    });
-    };
+            }) (marker,stationsInfo,infowindow));
+
+    }};
+    });
+    };
 
 function des_dropdown(){
     let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
@@ -624,122 +596,122 @@ function des_dropdown(){
 }
 des_dropdown();
 
-function MarkerFromDropdown_des (){
-    var DDnumber = document.getElementById("des_dropdown").value;
+function MarkerFromDropdown_des (){
+    var DDnumber = document.getElementById("des_dropdown").value;
     console.log(DDnumber);
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
-    var stations = obj.bikeMix;
-    for (var i = 0; i < stations.length; i++) { 
-        var number = stations[i].number;
-        if (number == DDnumber){
-            // console.log("hi")
-            var lat=stations[i].lat;
-            var lng=stations[i].lng;
+    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    var stations = obj.bikeMix;
+    for (var i = 0; i < stations.length; i++) {
+        var number = stations[i].number;
+        if (number == DDnumber){
+            // console.log("hi")
+            var lat=stations[i].lat;
+            var lng=stations[i].lng;
 
-            var stationsInfo =  '<div class="info_content">' +
-        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
-        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
-        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
-                        '</div>';
-                        var marker = new google.maps.Marker({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-                       
-                        icon: {
-                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                        // scaledSize: new google.maps.Size(50, 50),
-                        },
-                        animation:google.maps.Animation.Drop,
-                        title: stations[i].name,
-                        station_number: stations[i].number
-                    });
-                    marker.setVisible(false);
-                    map.setZoom(15);
-                    map.panTo(marker.position);
-                    marker.setMap(map);
+            var stationsInfo =  '<div class="info_content">' +
+        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
+        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
+        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
+        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
+                        '</div>';
+                        var marker = new google.maps.Marker({
+                        position: {
+                            lat: lat,
+                            lng: lng
+                        },
+                        map: map,
 
-                    var infowindow  = new google.maps.InfoWindow({
-                        content: ""
-                    });
-                    var pre = false;
+                        icon: {
+                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        // scaledSize: new google.maps.Size(50, 50),
+                        },
+                        animation:google.maps.Animation.Drop,
+                        title: stations[i].name,
+                        station_number: stations[i].number
+                    });
+                    marker.setVisible(false);
+                    map.setZoom(15);
+                    map.panTo(marker.position);
+                    marker.setMap(map);
 
-            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
-                pre = infowindow;
-                pre.setContent(stationsInfo);
-                    pre.open(map, marker);
-                    showchart(number );
+                    var infowindow  = new google.maps.InfoWindow({
+                        content: ""
+                    });
+                    var pre = false;
 
-                  showchart_week(number );
-                    showchart_hour(number );
-                
-            }) (marker,stationsInfo,infowindow));
+            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
+                pre = infowindow;
+                pre.setContent(stationsInfo);
+                    pre.open(map, marker);
+                    showchart(number );
 
-    }};
-    });
-    };
+                  showchart_week(number );
+                    showchart_hour(number );
 
+            }) (marker,stationsInfo,infowindow));
 
+    }};
+    });
+    };
 
 
-function showchart(number_id){
 
-google.charts.load('current', {
-'packages': ['corechart']
+
+function showchart(number_id){
+
+google.charts.load('current', {
+'packages': ['corechart']
 });
 
 google.charts.setOnLoadCallback(drawChart);
 
-function drawChart() {
-  var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
+function drawChart() {
+  var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
 
-let json = $.getJSON(url, null, function (obj) {
- var chart_info = obj.chart_info;
- var arr = [];
- arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
- console.log('cgart_info', chart_info);
- for (var i = 0; i < chart_info.length; i++) {
-     var arr1 = [];
+let json = $.getJSON(url, null, function (obj) {
+ var chart_info = obj.chart_info;
+ var arr = [];
+ arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+ console.log('cgart_info', chart_info);
+ for (var i = 0; i < chart_info.length; i++) {
+     var arr1 = [];
 
-    for (var j = 0; j < chart_info[i].length; j++) {
-        if (j==0){
-            arr1.push(chart_info[i][j]+"");
-        }
-        else{
-            arr1.push(chart_info[i][j]);
-        }
+    for (var j = 0; j < chart_info[i].length; j++) {
+        if (j==0){
+            arr1.push(chart_info[i][j]+"");
+        }
+        else{
+            arr1.push(chart_info[i][j]);
+        }
 
 
-    }
-    console.log('arr1', arr1);
-        arr.push(arr1)
+    }
+    console.log('arr1', arr1);
+        arr.push(arr1)
 }
 
 
-var data = google.visualization.arrayToDataTable(arr);
+var data = google.visualization.arrayToDataTable(arr);
 
-var options = {
-  title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
+var options = {
+  title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
 
-  hAxis: {
-    title: 'Hour',
-    titleTextStyle: {
-      color: '#333'
-    }
-  },
-  vAxis: {
-    minValue: 0,
-    gridlines: {
-      count: 24,
-    }
-  }
+  hAxis: {
+    title: 'Hour',
+    titleTextStyle: {
+      color: '#333'
+    }
+  },
+  vAxis: {
+    minValue: 0,
+    gridlines: {
+      count: 24,
+    }
+  }
 };
 
-var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-chart.draw(data, options);
+var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+chart.draw(data, options);
 });
 }}
 function showchart_week(number_id){
@@ -862,17 +834,17 @@ function show_weather(){
         var description = weather[0].description;
         var feels_like = weather[0].feels_like;
         var gust = weather[0].gust;
-        var icon=weather[0].icon;
-        
-        var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
+        var icon=weather[0].icon;
+
+        var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
         console.log(iconUrl);
         display_info = "<table border = 1 id=\"weatherTable\">";
-            display_info += "<tr><td>feels like</td><td>" + weather[0].feels_like + "</td><td>icon</td><td>" + "<img src='" + iconUrl  + "'>"  +"</td></tr>";
+            display_info += "<tr><td>feels like</td><td>" + weather[0].feels_like + "</td><td>icon</td><td>" + "<img src='" + iconUrl  + "'>"  +"</td></tr>";
             display_info += "<tr><td>temperature</td><td>" + weather[0].temp + "</td><td>description </td><td>" + weather[0].description + "</td></tr>";
             display_info += "<tr><td>min temperature</td><td>" + weather[0].temp_min + "</td><td>pressure</td><td>" + weather[0].pressure + " hpa</td></tr>";
             display_info += "<tr><td>max temperature</td><td>" + weather[0].temp_max + "</td><td>humidity</td><td>" + weather[0].humidity + "%</td></tr>";
             display_info += "<tr><td>sunrise</td><td>" + weather[0].sunrise + "</td><td>sunset</td><td>" + weather[0].sunset + "</td></tr>";
-            
+
 
             display_info += "</table>"
 
@@ -894,134 +866,26 @@ show_weather();
 <div id="AllInfo">
 
 
+<div id=dropdownWarp style="float: right">
 
-
-
-
-<div id=dropdownWarp>
-        
     <select id="dropdown" required onchange="return MarkerFromDropdown();"></select>
     <!-- <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button"> -->
-    <select id="des_dropdown" style="font-size: 15px;" required onchange="return MarkerFromDropdown_des();"></select>
-    <br><br>
+    <select id="des_dropdown" style="font-size: 15px; color: black" required onchange="return MarkerFromDropdown_des();"></select>
+    <br><br><br>
 
-    <form name="date" method="post">
-  <select name="year" οnchange="selectYear(this.value)">
-    <option value="">Select Year</option>
-  </select>
-  <select name="month" οnchange="selectMonth(this.value)">
-    <option value="">Select Month</option>
-  </select>
-  <select name="day">
-    <option value="">Select Day</option>
-  </select>
-  <select id = "hour">bbb</select>
-  <!-- <input id="click" type='submit' onclick="showPredict()"> -->
-</form>
+    <div class="col-md-4" >
+    <input type="text" id="datetime_1" style="color: black"/></div>
 
+    <div class="col-md-4">
+    <input type="text" id="datetime_2" style="color: black" /></div><br><br><br>
 
-<script language="JavaScript">
-
-   function dateStart()
-   {
-       //月份对应天数
-       MonHead = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-
-       //给年下拉框赋内容
-       var y  = new Date().getFullYear();
-       for (var i = (y-50); i < (y+50); i++) //以今年为准，前50年，后50年
-           document.date.year.options.add(new Option(" "+ i +" Year", i));
-
-       //给月下拉框赋内容
-       for (var i = 1; i < 13; i++)
-           document.date.month.options.add(new Option(" " + i + " Month", i));
-
-       document.date.year.value = y;
-       document.date.month.value = new Date().getMonth() + 1;
-       var n = MonHead[new Date().getMonth()];
-       if (  new Date().getMonth() ==1 && IsPinYear(yearvalue)  )
-           n++;
-       writeDay(n); //赋日期下拉框
-       // writeHour();
-
-       document.date.day.value = new Date().getDate();
-   }
-
-   if(document.attachEvent)
-       window.attachEvent("onload", dateStart);
-   else
-       window.addEventListener('load', dateStart, false);
-
-   function selectYear(str) //年发生变化时日期发生变化(主要是判断闰平年)
-   {
-       var monthvalue = document.date.month.options[document.date.month.selectedIndex].value;
-       if (monthvalue == "")
-       {
-           var e = document.date.day;
-           optionsClear(e);
-           return;
-       }
-       var n = MonHead[monthvalue - 1];
-       if (  monthvalue ==2 && IsPinYear(str)  )
-           n++;
-       writeDay(n);
-   }
-
-   function selectMonth(str)   //月发生变化时日期联动
-   {
-        var yearvalue = document.date.year.options[document.date.year.selectedIndex].value;
-        if (yearvalue == "")
-        {
-            var e = document.date.day;
-            optionsClear(e);
-            return;
-        }
-        var n = MonHead[str - 1];
-        if (  str ==2 && IsPinYear(yearvalue)  )
-            n++;
-            writeDay(n);
-        }
-
-   function writeDay(n)   //据条件写日期的下拉框
-   {
-       var e = document.date.day; optionsClear(e);
-       for (var i=1; i<(n+1); i++)
-           e.options.add(new Option(" "+ i + " Day", i));
-   }
-
-   function writeHour(){
-       var myDate = new Date();
-       var hour = myDate.getHours();
-       // console.log(hour);
-    var starthourlist = "<option value = ''>" +   hour +":00"+ "</option>";
-    for (var i = 0; i <=24 ; i++){
-        starthourlist += "<option value = \"" + i + "\">" + i + ':00'+ "</option>";
-    }
-    //console.log(startyearlist);
-    document.getElementById("hour").innerHTML = starthourlist;
-}
-
-
-
-   function IsPinYear(year)//判断是否闰平年
-   {
-       return(  0 == year%4 && ( year%100 !=0 || year%400 == 0 )  );
-   }
-
-   function optionsClear(e)
-   {
-       e.options.length = 1;
-   }
-window.onload=function(){
-
-    writeHour();
-}
-</script>
+    <div style="margin-left: 18px">
+    <input type="submit" class="btn btn-default"  value="Submit" onclick="display_time() ">
+    </div>
+</div>
 </div>
 
-
 <div id="googleMap" ></div>
-
 <!-- <div id="googleMap" style="width:70%;height:50%; "></div> -->
 <div id="weather"></div>
 </div>
@@ -1031,19 +895,12 @@ window.onload=function(){
 <div class="chart"; id="chart_div_week" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_hour" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div" style="width: 33%; height: 40%;"></div>
-<div class="chart"; id="chart_div_2" style="width: 33%; height: 40%;">hhhhhh</div>
+<div class="chart"; id="chart_div_2" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_predictFrom" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_predictTo" style="width: 33%; height: 40%;"></div>
 </div>
 
-<div class="col-sm-6">
-    <input type="text" id="datetime_1" />
-</div>
 
-<div class="col-sm-6">
-    <input type="text" id="datetime_2" />
-</div>
-<input type="submit" class="btn btn-lg"  value="Submit" onclick="display_time()"></div>
 
 
 <div style="background-color:#F8F3F6; padding-bottom: 30px; " id='results'></div>
