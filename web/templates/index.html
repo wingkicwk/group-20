@@ -316,17 +316,7 @@ function showchart_hour(number_id){
                 arr.push(arr1);
               console.log('arr1', arr1);
         }
-         // for (var i = 0; i < chart_info.length; i++) {
-         //     // var arr1 = [];
-         //
-         //     arr.push(chart_info[i]);
-         //
-         //        }
-         //
-         //
-         //
-         //    console.log('arr', arr);
-                // arr.push(arr1);
+
 
 
         var data = google.visualization.arrayToDataTable(arr);
@@ -581,7 +571,7 @@ function MarkerFromDropdown_des (){
                 pre.setContent(stationsInfo);
                     pre.open(map, marker);
                     showchart(number );
-                    showchart_2(number );
+
                   showchart_week(number );
                     showchart_hour(number );
                 
@@ -594,7 +584,7 @@ function MarkerFromDropdown_des (){
 
 
 
-    function showchart(number_id){
+function showchart(number_id){
 
 google.charts.load('current', {
 'packages': ['corechart']
@@ -651,66 +641,6 @@ var chart = new google.visualization.AreaChart(document.getElementById('char
 chart.draw(data, options);
 });
 }}
-
-
-    function showchart_2(number_idd){
-
-google.charts.load('current', {
-'packages': ['corechart']
-});
-
-google.charts.setOnLoadCallback(drawChart);
-
-function drawChart() {
-  var url = 'http://127.0.0.1:5000/dynamic/' + number_idd;
-
-let json = $.getJSON(url, null, function (obj) {
- var chart_info = obj.chart_info;
- var arr = [];
- arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
- console.log('cgart_info', chart_info);
- for (var i = 0; i < chart_info.length; i++) {
-     var arr1 = [];
-
-    for (var j = 0; j < chart_info[i].length; j++) {
-        if (j==0){
-            arr1.push(chart_info[i][j]+"");
-        }
-        else{
-            arr1.push(chart_info[i][j]);
-        }
-
-
-    }
-    console.log('arr1', arr1);
-        arr.push(arr1)
-}
-
-
-var data = google.visualization.arrayToDataTable(arr);
-
-var options = {
-  title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
-
-  hAxis: {
-    title: 'Hour',
-    titleTextStyle: {
-      color: '#333'
-    }
-  },
-  vAxis: {
-    minValue: 0,
-    gridlines: {
-      count: 24,
-    }
-  }
-};
-
-var chart = new google.visualization.AreaChart(document.getElementById('chart_div_2'));
-chart.draw(data, options);
-});
-}}
-
 function showchart_week(number_id){
 
 google.charts.load('current', {
@@ -863,9 +793,6 @@ function show_weather(){
 });
 }
 show_weather();
-// function showPredict(){
-//               document.getElementById('results').style.display = 'inline-block';
-//           }
 </script>
 
 </head>

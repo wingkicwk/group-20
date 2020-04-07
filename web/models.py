@@ -1,26 +1,14 @@
-import numpy as np
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
+
 import re
 import pickle
-from patsy import dmatrices
+
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
-from sklearn import metrics
-from sklearn.model_selection import cross_validate
-from sklearn.model_selection import cross_val_score 
-
-from sqlalchemy import create_engine
-
-# pd.options.mode.chained_assignment=None
-# %matplotlib inline
 import os
 import pymysql
 pymysql.install_as_MySQLdb()
 import pandas as pd
-import sys
+
 from datetime import datetime, date, timedelta
 
 
