@@ -3,11 +3,7 @@ import pickle
 import pandas as pd
 from datetime import datetime
 import pymysql
-import  json
-import requests
-import configparser
-from flask import Flask, g, render_template, jsonify
-from sklearn.preprocessing import PolynomialFeatures
+
 import numpy as np
 def connect_to_database():
     conn = pymysql.connect(
