@@ -1,17 +1,7 @@
 <html lang="en">
 <head>
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <style>
-
-h1{
-    padding-left:5%;
-    font-size:5em;
-    /* color:grey; */
-    /* text-align:center; */
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-}
-    </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>Dublin Bike</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -26,10 +16,10 @@ h1{
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <link type="text/css" rel=stylesheet href="{{ url_for('static',filename='index.css')}}">
-    </head>
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvBNXUTSTxrubQdbSTLWk01GbuAEoq2H0&sensor=false"></script>
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvBNXUTSTxrubQdbSTLWk01GbuAEoq2H0&sensor=false"></script>
+     <script type="text/javascript" src="static/initialize.js"></script>
+    <script type="text/javascript" src="static/show_weather.js"></script>
 <script>
 
 // create the dropdown list for time
@@ -85,241 +75,10 @@ function display_time(){
 
 
 //show the map things
-var myCenter=new google.maps.LatLng(53.350140, -6.266155);
-var map;
-var mapProp;
-function initialize() {
-    mapProp = {
-        center: new google.maps.LatLng(53.350140, -6.266155),
-        zoom: 13,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
-    map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-    var marker = new google.maps.Marker({
-        position: myCenter,
-    });
 
 
 
-    function showStationMarkers() {
-        let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
 
-                var stations = obj.bikeMix;
-                for (var i = 0; i < stations.length; i++) {
-                    var lat = stations[i].lat;
-                    var lng = stations[i].lng;
-
-
-                    var stationsInfo =  '<div class="info_content">' +
-                        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
-                        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-                        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
-                        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
-                                        '</div>';
-
-                    var station_number = stations[i].number;
-                    var marker = new google.maps.Marker({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-                        animation:google.maps.Animation.Drop,
-                        title: stations[i].name,
-                        station_number: stations[i].number
-                    });
-                    marker.setMap(map);
-
-
-                    var infowindow  = new google.maps.InfoWindow({
-                        content: ""
-                    });
-                    var pre = false;
-
-                google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
-                    if(pre){
-                        pre.close();
-                    }
-                    pre = infowindow;
-                    var number_id = stations[i].number;
-                    return function() {
-                        pre.setContent(stationsInfo);
-                        pre.open(map, marker);
-                        showchart_week(number_id);
-                        showchart_hour(number_id);
-                        showchart(number_id);
-                    };
-                })(marker,stationsInfo,infowindow));
-             };
-        });
-
-function showchart(number_id){
-
-        google.charts.load('current', {'packages': ['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-             var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
-
-             let json = $.getJSON(url, null, function (obj) {
-                 var chart_info = obj.chart_info;
-                 var arr = [];
-                 arr.push(['hour', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
-                 console.log(arr);
-                 for (var i = 0; i < chart_info.length; i++) {
-                     var arr1 = [];
-
-                    for (var j = 0; j < chart_info[i].length; j++) {
-                        if (j==0){
-                            arr1.push(chart_info[i][j]+"");
-                        }
-                        else{
-                            arr1.push(chart_info[i][j]);
-                        }
-                    }
-                    // console.log('arr1', arr1);
-                     arr.push(arr1)
-                }
-
-
-            var data = google.visualization.arrayToDataTable(arr);
-
-        var options = {
-          title: 'Average bikes in use per hour, per day(based on the last 2 weeks)',
-
-          hAxis: {
-            title: 'Hour',
-            titleTextStyle: {
-              color: '#333'
-            }
-          },
-            vAxis: {
-            minValue: 0,
-            }
-           };
-
-        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-             });
-            }
-        }
-function showchart_week(number_id){
-
-        google.charts.load('current', {
-        'packages': ['corechart']
-      });
-
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-          var url = 'http://127.0.0.1:5000/dynamic/weekdata/' + number_id;
-
-     let json = $.getJSON(url, null, function (obj) {
-         var chart_info = obj.chart_info;
-         // console.log(chart_info)
-         var arr = [];
-         arr.push(['Week', 'Available Bikes']);
-         console.log('cgart_info', chart_info);
-         for (var i = 0; i < chart_info.length; i++) {
-             // var arr1 = [];
-
-             arr.push(chart_info[i]);
-
-                }
-
-
-
-            console.log('arr', arr);
-                // arr.push(arr1);
-
-
-        var data = google.visualization.arrayToDataTable(arr);
-
-        var options = {
-          title: 'Average bikes in use per week',
-
-          hAxis: {
-            title: 'week',
-            titleTextStyle: {
-              color: '#333'
-            }
-          },
-          vAxis: {
-            minValue: 0,
-
-          }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div_week'));
-        chart.draw(data, options);
-      });
-      }
-
-    }
-function showchart_hour(number_id){
-
-        google.charts.load('current', {
-        'packages': ['corechart']
-      });
-
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-          var url = 'http://127.0.0.1:5000/dynamic/hourdata/' + number_id;
-
-     let json = $.getJSON(url, null, function (obj) {
-         var chart_info = obj.chart_info;
-         var arr = [];
-         arr.push(['Hour', 'Available Bikes']);
-         console.log('cgart_info', chart_info);
-          for (var i = 0; i < chart_info.length; i++) {
-             var arr1 = [];
-
-            for (var j = 0; j < chart_info[i].length; j++) {
-                if (j==0){
-                    arr1.push(chart_info[i][j]+"");
-                }
-                else{
-                    arr1.push(chart_info[i][j]);
-                }
-
-
-            }
-            // console.log('arr1', arr1);
-                arr.push(arr1);
-              console.log('arr1', arr1);
-        }
-
-
-
-        var data = google.visualization.arrayToDataTable(arr);
-
-        var options = {
-          title: 'Average bikes in use per hour',
-
-          hAxis: {
-            title: 'week',
-            titleTextStyle: {
-              color: '#333'
-            }
-          },
-          vAxis: {
-            minValue: 0,
-
-          }
-        };
-
-        var chart = new google.visualization.LineChart(document.getElementById('chart_div_hour'));
-        chart.draw(data, options);
-      });
-      }
-
-    }
-    }
-    showStationMarkers();
-}
-
-google.maps.event.addDomListener(window, 'load', initialize);
 
 
 function dropdown(){
@@ -825,35 +584,7 @@ chart.draw(data, options);
 
 
 
-function show_weather(){
- let json = $.getJSON("http://127.0.0.1:5000/weather", null, function (data) {
 
-    if ('weather' in data) {
-
-        var weather = data.weather;
-        var description = weather[0].description;
-        var feels_like = weather[0].feels_like;
-        var gust = weather[0].gust;
-        var icon=weather[0].icon;
-
-        var iconUrl = "http://openweathermap.org/img/w/" + icon + ".png";
-        console.log(iconUrl);
-        display_info = "<table border = 1 id=\"weatherTable\">";
-            display_info += "<tr><td>feels like</td><td>" + weather[0].feels_like + "</td><td>icon</td><td>" + "<img src='" + iconUrl  + "'>"  +"</td></tr>";
-            display_info += "<tr><td>temperature</td><td>" + weather[0].temp + "</td><td>description </td><td>" + weather[0].description + "</td></tr>";
-            display_info += "<tr><td>min temperature</td><td>" + weather[0].temp_min + "</td><td>pressure</td><td>" + weather[0].pressure + " hpa</td></tr>";
-            display_info += "<tr><td>max temperature</td><td>" + weather[0].temp_max + "</td><td>humidity</td><td>" + weather[0].humidity + "%</td></tr>";
-            display_info += "<tr><td>sunrise</td><td>" + weather[0].sunrise + "</td><td>sunset</td><td>" + weather[0].sunset + "</td></tr>";
-
-
-            display_info += "</table>"
-
-            document.getElementById("weather").innerHTML = display_info;
-    }
-
-});
-}
-show_weather();
 </script>
 
 </head>

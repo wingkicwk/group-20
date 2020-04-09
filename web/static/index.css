@@ -4,9 +4,17 @@ body{
 	background-image:url('img/bikePic.png');
     background-size:cover;
     background-attachment: fixed;
+    font-family: sans-serif;
     /* color:white; */
 }
-
+h1{
+    padding-left:5%;
+    font-size:3em;
+    /* color:grey; */
+    /* text-align:center; */
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    font-family: Georgia;
+}
 #dropdownWarp{
     display: inline-block;
     padding:1%;
