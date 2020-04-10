@@ -35,6 +35,7 @@ $(function() {
             });
     $('#datetime_2').datetimepicker({
                 minDate: new Date(),
+                maxDate: new Date(new Date().setDate(todayDate + 4)),
                 format: 'YYYY-MM-DD HH:mm',
 
                 stepping: 30,
@@ -595,24 +596,6 @@ chart.draw(data, options);
 <div id='cbg'></div>
 <div id="AllInfo">
 
-
-<div id=dropdownWarp style="float: right">
-
-    <select id="dropdown" required onchange="return MarkerFromDropdown();"></select>
-    <!-- <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button"> -->
-    <select id="des_dropdown" style="font-size: 15px; color: black" required onchange="return MarkerFromDropdown_des();"></select>
-    <br><br><br>
-
-    <div class="col-md-4" >
-    <input type="text" id="datetime_1" style="color: black"/></div>
-
-    <div class="col-md-4">
-    <input type="text" id="datetime_2" style="color: black" /></div><br><br><br>
-
-    <div style="margin-left: 18px">
-    <input type="submit" class="btn btn-default"  value="Submit" onclick="display_time() ">
-    </div>
-</div>
 </div>
 
 <div id="googleMap" ></div>
@@ -620,15 +603,40 @@ chart.draw(data, options);
 <div id="weather"></div>
 </div>
 </div>
-<!-- <div id="weather" style="width:30%;height:10%; "></div> -->
-<div id="wrap">
-<div class="chart"; id="chart_div_week" style="width: 33%; height: 40%;"></div>
-<div class="chart"; id="chart_div_hour" style="width: 33%; height: 40%;"></div>
-<div class="chart"; id="chart_div" style="width: 33%; height: 40%;"></div>
+
+
+<div id=dropdownWarp >
+    <span style="margin: 70px"></span>
+    <select id="dropdown" required onchange="return MarkerFromDropdown();"></select>
+    <span style="margin: 100px"></span>
+    <!-- <input type="button" value="SUBMIT" onclick="return stationInfo();" id="button"> -->
+    <select id="des_dropdown" style="font-size: 15px; color: black; " required onchange="return MarkerFromDropdown_des();"></select>
+    <br><br><br>
+<div style="margin-left: 150px;">
+    <div class="col-md-4" style="float: left" >
+    <input type="text" id="datetime_1" style="color: black"/></div>
+
+    <div class="col-md-4" style="float: right">
+    <input type="text" id="datetime_2" style="color: black" /></div><br><br><br>
+
+    <div style="margin-left: 18px; ">
+    <input type="submit" class="btn btn-default"  value="Submit" onclick="display_time() ">
+    </div>
+</div>
+</div>
+<div id="wrap" >
+<div class="chart"; id="chart_div_week" style="width: 28%; height: 35%; "></div>
+<div class="chart"; id="chart_div_hour" style="width: 28%; height: 35%; "></div>
+<div class="chart"; id="chart_div" style="width: 28%; height: 35%; "></div>
+</div>
+
+
+
+
 <div class="chart"; id="chart_div_2" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_predictFrom" style="width: 33%; height: 40%;"></div>
 <div class="chart"; id="chart_div_predictTo" style="width: 33%; height: 40%;"></div>
-</div>
+
 
 
 

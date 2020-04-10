@@ -17,7 +17,6 @@ h1{
 }
 #dropdownWarp{
     display: inline-block;
-    padding:1%;
 } 
 #dropdown {
     padding-right:8px;   
@@ -36,7 +35,6 @@ h1{
 #dropdown:hover {
     box-shadow: 0 0 4px rgb(204, 204, 204)
 }
-
 
 
 #wrap{
@@ -106,7 +104,7 @@ table{
 }
 
 tr{
-    border-bottom: solid 1px grey
+    border-bottom: solid 1px black
 }
 
 tbody>tr>:nth-child(1){
