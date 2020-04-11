@@ -65,7 +65,7 @@ function display_time(){
      console.log(station1);
      console.log(station2);
 
-     var url = 'http://127.0.0.1:5000/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
+     var url = 'http://0.0.0.0:80/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
      let json = $.getJSON(url, null, function(obj) {
                 var pre_info = obj.pre_info;
                 console.log(pre_info);
@@ -83,7 +83,7 @@ function display_time(){
 
 
 function dropdown(){
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (obj) {
 
         var stations = obj.bikeMix;
         var options = "<option value=''>Select a departure</option>";
@@ -149,7 +149,7 @@ function showResult(obj){
     To_DayOfWeek="Sunday";
   };
 
-  let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (data) {
+  let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (data) {
 
     var stations = data.bikeMix;
     var FromStationName;
@@ -279,7 +279,7 @@ chart.draw(FromData, options);
 function MarkerFromDropdown (){
     var DDnumber = document.getElementById("dropdown").value;
     console.log(DDnumber);
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (obj) {
     var stations = obj.bikeMix;
     for (var i = 0; i < stations.length; i++) {
         var number = stations[i].number;
@@ -337,7 +337,7 @@ function MarkerFromDropdown (){
     };
 
 function des_dropdown(){
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (obj) {
 
         var stations = obj.bikeMix;
         var options = "<option value=''>Select a destination</option>";
@@ -358,7 +358,7 @@ des_dropdown();
 function MarkerFromDropdown_des (){
     var DDnumber = document.getElementById("des_dropdown").value;
     console.log(DDnumber);
-    let json = $.getJSON("http://127.0.0.1:5000/bikeMix", null, function (obj) {
+    let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (obj) {
     var stations = obj.bikeMix;
     for (var i = 0; i < stations.length; i++) {
         var number = stations[i].number;
@@ -425,7 +425,7 @@ google.charts.load('current', {
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-  var url = 'http://127.0.0.1:5000/dynamic/' + number_id;
+  var url = 'http://0.0.0.0:80/dynamic/' + number_id;
 
 let json = $.getJSON(url, null, function (obj) {
  var chart_info = obj.chart_info;
@@ -482,7 +482,7 @@ google.charts.load('current', {
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-  var url = 'http://127.0.0.1:5000/dynamic/weekdata/' + number_id;
+  var url = 'http://0.0.0.0:80/dynamic/weekdata/' + number_id;
 
 let json = $.getJSON(url, null, function (obj) {
  var chart_info = obj.chart_info;
@@ -534,7 +534,7 @@ google.charts.load('current', {
 google.charts.setOnLoadCallback(drawChart);
 
 function drawChart() {
-  var url = 'http://127.0.0.1:5000/dynamic/hourdata/' + number_id;
+  var url = 'http://0.0.0.0:80/dynamic/hourdata/' + number_id;
 
 let json = $.getJSON(url, null, function (obj) {
  var chart_info = obj.chart_info;
