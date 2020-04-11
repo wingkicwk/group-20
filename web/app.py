@@ -1,13 +1,9 @@
 from flask import Flask, g, render_template, jsonify
-import configparser
 import time
 from datetime import datetime, timedelta
 import pandas as pd
 
-import requests
-# import json
 import pymysql
-import json
 import predict
 
 app = Flask(__name__, static_url_path='/static')
