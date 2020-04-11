@@ -15,12 +15,12 @@ from datetime import datetime, date, timedelta
 
 def connect_to_database():
     conn = pymysql.connect(
-        host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
-        port=3306,  # 端口号
-        user="group20",  # 用户名
-        passwd="comp30830",  # 密码
-        db="segroupproject",  # 数据库名称
-        charset='utf8',  # 连接编码，根据需要填写
+        host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",
+        port=3306,
+        user="group20",
+        passwd="comp30830",
+        db="segroupproject",
+        charset='utf8', 
     )
     return conn
 
