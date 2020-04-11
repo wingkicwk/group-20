@@ -179,7 +179,7 @@ function showchart_hour(number_id){
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-          var url = 'http://0.0.0.0:80/dynamic/hourdata/' + number_id;
+          var url = 'http://18.203.168.242/dynamic/hourdata/' + number_id;
 
      let json = $.getJSON(url, null, function (obj) {
          var chart_info = obj.chart_info;
