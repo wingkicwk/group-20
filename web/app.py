@@ -24,15 +24,15 @@ def connect_to_database():
     #                                                                       config.PORT,
     #                                                                       config.DB),echo=True)
     conn = pymysql.connect(
-        host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",  # mysql服务器地址
-        port=3306,  # 端口号
-        user="group20",  # 用户名
-        passwd="comp30830",  # 密码
-        db="segroupproject",  # 数据库名称
-        charset='utf8',  # 连接编码，根据需要填写
+        host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",
+        port=3306,
+        user="group20",
+        passwd="comp30830",
+        db="segroupproject",
+        charset='utf8',
     )
     return conn
-    # cur = conn.cursor()  # 创建并返回游标
+    # cur = conn.cursor()
 
 
 def get_db():
@@ -282,4 +282,4 @@ def get_hour(number_id):
 
 
 if __name__ == '__main__':
-    app.run(host= "0.0.0.0" , port=80 ,debug=True)
+    app.run(host="0.0.0.0", port=80, debug=True)
