@@ -16,7 +16,7 @@ function initialize() {
 
 
     function showStationMarkers() {
-        let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
+        let json = $.getJSON("http://0.0.0.0:80/bikeMix", null, function (obj) {
 
                 var stations = obj.bikeMix;
                 for (var i = 0; i < stations.length; i++) {
@@ -73,7 +73,7 @@ function showchart(number_id){
         google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
-             var url = 'http://18.203.168.242/dynamic/' + number_id;
+             var url = 'http://0.0.0.0:80/dynamic/' + number_id;
 
              let json = $.getJSON(url, null, function (obj) {
                  var chart_info = obj.chart_info;
@@ -126,7 +126,7 @@ function showchart_week(number_id){
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-          var url = 'http://18.203.168.242/dynamic/weekdata/' + number_id;
+          var url = 'http://0.0.0.0:80/dynamic/weekdata/' + number_id;
 
      let json = $.getJSON(url, null, function (obj) {
          var chart_info = obj.chart_info;
@@ -179,7 +179,7 @@ function showchart_hour(number_id){
       google.charts.setOnLoadCallback(drawChart);
 
       function drawChart() {
-          var url = 'http://127.0.0.1:5000/dynamic/hourdata/' + number_id;
+          var url = 'http://0.0.0.0:80/dynamic/hourdata/' + number_id;
 
      let json = $.getJSON(url, null, function (obj) {
          var chart_info = obj.chart_info;
