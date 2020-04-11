@@ -65,7 +65,7 @@ function display_time(){
      console.log(station1);
      console.log(station2);
 
-     var url = 'http://0.0.0.0:80/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
+     var url = 'http://18.203.168.242/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
      let json = $.getJSON(url, null, function(obj) {
                 var pre_info = obj.pre_info;
                 console.log(pre_info);
