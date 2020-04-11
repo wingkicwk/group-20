@@ -1,5 +1,5 @@
 function show_weather(){
- let json = $.getJSON("http://0.0.0.0:80/weather", null, function (data) {
+ let json = $.getJSON("http://18.203.168.242/weather", null, function (data) {
 
     if ('weather' in data) {
 
