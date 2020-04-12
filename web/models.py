@@ -28,11 +28,8 @@ def connect_to_database():
 def Model(stationNumber):
 
     conn = connect_to_database()
-
     cur = conn.cursor()
 
-    #     cur.execute(sqlFetchCommand)
-    # rows = cur.fetchall()
     stationNumber=str(stationNumber['number'])
 
     df = pd.read_sql_query("SELECT * FROM segroupproject.dynamic_bikeData where number='" + stationNumber + "'", conn)
@@ -78,28 +75,27 @@ def Model(stationNumber):
             
             AllBikeWeather.loc[index,'current'] = elem  + timedelta(hours=1)
 
-
     AllBikeWeather['hour'] = None
     AllBikeWeather['weekday'] = None
     for index, elem in AllBikeWeather['current'].items():
-    #     d = datetime.strptime(elem, '%Y-%m-%d %H:%M:%S')
 
         hour = elem.hour
         weekday = elem.weekday()
         AllBikeWeather.loc[index,'hour'] = hour
         AllBikeWeather.loc[index,'weekday'] = weekday
 
-
+    #drop low correlation colums
     drop_list = ['now_time','deg', 'gust','status','lon','lat' ,'base','description','icon','pressure','humidity','visibility','speed','temp_min','temp_max','clouds_all','dt','sys_type','sys_id','sys_country','sunrise','sunset','timezone','id','name','cod']
     df = AllBikeWeather.drop(columns=['now_time','deg', 'gust','status','lon','lat' ,'base','description','icon','pressure','humidity','visibility','speed','temp_min','temp_max','clouds_all','dt','sys_type','sys_id','sys_country','sunrise','sunset','timezone','id','name','cod'])
 
-
+    #delete rows with null values
     def delete_null_row(df):
         lis = ['current', 'weather_id','main','temp','hour','weekday','feels_like']
         for i in lis:
             df.drop(df[df[i].isnull().values==True].index,inplace = True)
     delete_null_row(df)
 
+    #change the data types of colums 
     df['number'] = df['number'].astype('category')
     df['available_bike_stands'] = df['available_bike_stands'].astype('int')
     df['available_bikes'] = df['available_bikes'].astype('int')
@@ -113,9 +109,12 @@ def Model(stationNumber):
     df['weekday'] = df['weekday'].astype('category')
     df['hour'] = df['hour'].astype('category')
 
+    # y is the target
     y = pd.DataFrame(df["available_bikes"])
+    # X is everything else
     X = df.drop(["available_bikes"],1)
 
+    # Split the dataset into two datasets: 70% training and 30% test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3,random_state=1)
 
     continuous_columns = X.select_dtypes(['int32','float64']).columns
@@ -148,26 +147,24 @@ def Model(stationNumber):
 
     multiple_linreg = LinearRegression().fit(X_train, y_train)
 
+    #remove special characters and create pickle file with name of stationNumbers
     outfile = re.sub("['/()]", '', stationNumber)
     outfile = outfile.replace(" ","")
     outfile = "web/Models/" + outfile + ".pkl"
-
-    os.makedirs(os.path.dirname(outfile), exist_ok=True)
 
     with open(outfile,'wb') as handle:
         pickle.dump(multiple_linreg,handle,pickle.HIGHEST_PROTOCOL)
 
 def AllModels():
-
+    """get all station numbers from database and create model for each of them"""
     conn = connect_to_database()
-
     cur = conn.cursor()
 
 
     stationNumberList=[] 
 
+
     getNumber = "SELECT DISTINCT number FROM segroupproject.dynamic_bikeData;"
-        #DB call to extract station names - stored as list of dicts
 
     cur.execute(getNumber)
     rows = cur.fetchall()  
