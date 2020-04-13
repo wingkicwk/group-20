@@ -23,7 +23,7 @@ def GetRightForecast(unixTime):
     #get the WeatherForecast json file from api
     WeatherForecast=requests.get(WeatherForecastURL).json()
 
-    #Returns cloest weather forecast that matched, if can't find suitable one then return false
+    #Returns closest weather forecast that matched, if can't find suitable one then return false
     for i in range(len(WeatherForecast['list'])):
         if unixTime <= WeatherForecast['list'][i]['dt']:
             return WeatherForecast['list'][i]
@@ -125,6 +125,3 @@ def predictFutureBikes(stationNumber,unixTime):
 
     #return a tuple including available bike and available bike stands
     return result
-
-
-predictFutureBikes(30,1586193417)

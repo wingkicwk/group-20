@@ -9,16 +9,7 @@ import predict
 app = Flask(__name__, static_url_path='/static')
 
 
-# app1 = Flask(__name__)
-# app1.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
-# app.config.from_object('config')
-
 def connect_to_database():
-    # return engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}".format(config.USER,
-    #                                                                       config.PASSWORD,
-    #                                                                       config.URI,
-    #                                                                       config.PORT,
-    #                                                                       config.DB),echo=True)
     conn = pymysql.connect(
         host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",
         port=3306,
@@ -28,8 +19,6 @@ def connect_to_database():
         charset='utf8',
     )
     return conn
-    # cur = conn.cursor()
-
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -41,12 +30,17 @@ def get_db():
 def root():
     return render_template('index.html')
 
-
 @app.route('/<FromStation>/<int:unixTime>/<ToStation>/<int:ToTime>')
 def prediction(unixTime, FromStation, ToStation, ToTime):
+
+    #create datetime object from unix time of pick up station
     From_DTime = datetime.utcfromtimestamp(unixTime)
 
+    #create datetime object from unix time of drop off station
     To_DTime = datetime.utcfromtimestamp(unixTime)
+
+
+     #get the time 3 hours before and after the time selected by user to form a graph
 
     FromTimeSub1h = unixTime - 3600
     FromTimeSub2h = unixTime - 3600 * 2
@@ -64,6 +58,7 @@ def prediction(unixTime, FromStation, ToStation, ToTime):
     ToTimePlus2h = unixTime + 3600 * 2
     ToTimePlus3h = unixTime + 3600 * 3
 
+    #predict available bikes and stands number with station number and unix time given
     From_availableBikes = predict.predictFutureBikes(int(FromStation), unixTime)
     To_availableBikes = predict.predictFutureBikes(int(ToStation), ToTime)
 
@@ -83,14 +78,16 @@ def prediction(unixTime, FromStation, ToStation, ToTime):
     To_availableBikesPlus2h = predict.predictFutureBikes(int(ToStation), ToTimePlus2h)
     To_availableBikesPlus3h = predict.predictFutureBikes(int(ToStation), ToTimePlus3h)
 
+    #extract weekday from unix time
     From_DayOfWeek = From_DTime.today().weekday()
-
     To_DayOfWeek = To_DTime.today().weekday()
 
+    #extract hour from unix time
     From_DTime_Hour = From_DTime.strftime("%H")
-    From_DTime = From_DTime.strftime("%m/%d/%Y, %H:%M:%S")
-
     To_DTime_Hour = To_DTime.strftime("%H")
+
+    #convert datetime to string 
+    From_DTime = From_DTime.strftime("%m/%d/%Y, %H:%M:%S")
     To_DTime = To_DTime.strftime("%m/%d/%Y, %H:%M:%S")
 
     return jsonify(FromStation, ToStation, From_DTime, From_DayOfWeek, To_DTime, To_DayOfWeek, From_availableBikes,

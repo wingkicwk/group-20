@@ -152,7 +152,7 @@ def Model(stationNumber):
     outfile = "web/Models/" + outfile + ".pkl"
 
     with open(outfile,'wb') as handle:
-        pickle.dump(multiple_linreg,handle,protocol=4)
+        pickle.dump(multiple_linreg,handle,protocol=2)
 
 def AllModels():
     """get all station numbers from database and create model for each of them"""
