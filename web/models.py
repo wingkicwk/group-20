@@ -78,7 +78,6 @@ def Model(stationNumber):
     AllBikeWeather['hour'] = None
     AllBikeWeather['weekday'] = None
     for index, elem in AllBikeWeather['current'].items():
-
         hour = elem.hour
         weekday = elem.weekday()
         AllBikeWeather.loc[index,'hour'] = hour
@@ -147,22 +146,20 @@ def Model(stationNumber):
 
     multiple_linreg = LinearRegression().fit(X_train, y_train)
 
-    #remove special characters and create pickle file with name of stationNumbers
+    #remove special characters, space and create pickle file with name of stationNumbers
     outfile = re.sub("['/()]", '', stationNumber)
     outfile = outfile.replace(" ","")
     outfile = "web/Models/" + outfile + ".pkl"
 
     with open(outfile,'wb') as handle:
-        pickle.dump(multiple_linreg,handle,pickle.HIGHEST_PROTOCOL)
+        pickle.dump(multiple_linreg,handle,protocol=4)
 
 def AllModels():
     """get all station numbers from database and create model for each of them"""
     conn = connect_to_database()
     cur = conn.cursor()
 
-
     stationNumberList=[] 
-
 
     getNumber = "SELECT DISTINCT number FROM segroupproject.dynamic_bikeData;"
 

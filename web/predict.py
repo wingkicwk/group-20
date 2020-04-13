@@ -31,25 +31,8 @@ def GetRightForecast(unixTime):
 
 def predictFutureBikes(stationNumber,unixTime):
 
-    conn = connect_to_database()
-
-    cur = conn.cursor()  
-
-    NumberAndStands=[]
-
-    # fetch bike stands and numbers
-    cur.execute("SELECT * from Bikestation;")
-    rows = cur.fetchall() 
-    
-    for row in rows:
-        NumberAndStands.append(dict(stationNumber = int(row[0]),bike_stands = int(row[5])))
-
-    # reformat the dictionary to make it easier to use in the following part
-    NumberAndStandPairs={NumberAndStand['stationNumber']: NumberAndStand['bike_stands'] for NumberAndStand in NumberAndStands}
-
     FutureWeather=GetRightForecast(unixTime)
 
-    print(FutureWeather)
     #create datetime object from unix time
     DateToPredict = datetime.fromtimestamp(unixTime)
 
@@ -117,8 +100,25 @@ def predictFutureBikes(stationNumber,unixTime):
     #round our prediction to integer
     RoundedPrediction=int(np.round(prediction))
 
-    #get available bike stands by subtract available bikes number from total bike stands
+    conn = connect_to_database()
+
+    cur = conn.cursor()  
+    NumberAndStands=[]
+
+    # fetch bike stands and numbers
+    cur.execute("SELECT * from Bikestation;")
+    rows = cur.fetchall() 
+    
+    for row in rows:
+        NumberAndStands.append(dict(stationNumber = int(row[0]),bike_stands = int(row[5])))
+
+    # reformat the dictionary to make it easier to use in the following part
+    NumberAndStandPairs={NumberAndStand['stationNumber']: NumberAndStand['bike_stands'] for NumberAndStand in NumberAndStands}
+
+    #get bike stands from the dictionary NumberAndStandPairs that associate with the given stationNumber
     bikeStands=NumberAndStandPairs[stationNumber]
+
+    #get available bike stands by subtract available bikes number from total bike stands
     AvabikeStands=bikeStands-RoundedPrediction
 
     result=(RoundedPrediction,AvabikeStands)
@@ -127,4 +127,4 @@ def predictFutureBikes(stationNumber,unixTime):
     return result
 
 
-# predictFutureBikes(30,1586193417)
+predictFutureBikes(30,1586193417)
