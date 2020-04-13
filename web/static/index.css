@@ -14,7 +14,29 @@ h1{
     /* text-align:center; */
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     font-family: Georgia;
+    
 }
+
+#selectSection{
+    padding-bottom: 5%;
+    padding-left:5%;
+    font-size:3em;
+    /* color:grey; */
+    /* text-align:center; */
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    font-family: Georgia;
+}
+
+#results{
+    padding-left:5%;
+    color:#F8F3F6;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+    padding-bottom: 5%;
+    font-family: Georgia;
+    font-size:2em;
+}
+
+
 #dropdownWarp{
     display: inline-block;
 } 
@@ -55,8 +77,6 @@ h1{
     position:relative;
     width:100%;
     height:100%;
-    /* padding:5%; */
-    
 }
 
 #cbg{
@@ -67,22 +87,17 @@ h1{
 /*reference https://stackoverflow.com/questions/5135019/css-opacity-only-to-background-color-not-the-text-on-it*/ 
     width:100%;
     z-index:-1;
+
 }
 
-#allInfo{
-    color:#E8E7E7;
-    /* float:right; */
-     padding:3%; 
-    padding-bottom: 10%;
-    margin-top:3%;   
-}
+
 #googlemap{
+    margin-top:5%; 
     color:black;
-    width:45%;
-    height:50%;
+    width:50%;
+    height:60%;
     float:left;
-    margin-bottom: 10%;
-    padding:5%; 
+    margin-left: 3%;
 }
 table{
     border-collapse:collapse;

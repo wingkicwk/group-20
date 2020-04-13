@@ -99,6 +99,8 @@ def predictFutureBikes(stationNumber,unixTime):
 
     #round our prediction to integer
     RoundedPrediction=int(np.round(prediction))
+    #make sure it is >=0
+    RoundedPrediction=max(0, RoundedPrediction)
 
     conn = connect_to_database()
 
@@ -122,6 +124,6 @@ def predictFutureBikes(stationNumber,unixTime):
     AvabikeStands=bikeStands-RoundedPrediction
 
     result=(RoundedPrediction,AvabikeStands)
-
+    print(result)
     #return a tuple including available bike and available bike stands
     return result

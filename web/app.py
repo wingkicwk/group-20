@@ -8,7 +8,6 @@ import predict
 
 app = Flask(__name__, static_url_path='/static')
 
-
 def connect_to_database():
     conn = pymysql.connect(
         host="group20db2.cuvpbui26dwd.eu-west-1.rds.amazonaws.com",
@@ -102,8 +101,7 @@ def prediction(unixTime, FromStation, ToStation, ToTime):
 @app.route('/stations')
 def get_stations():
     conn = connect_to_database()
-    # conn = get_db()
-    # # conn.row_factory = sqlite3.Row
+
     cur = conn.cursor()
     stations = []
 
@@ -115,7 +113,6 @@ def get_stations():
                              bike_stands=row[5]))
 
     return jsonify(stations=stations)
-
 
 @app.route('/dynamicBike')
 def get_dynamicBike():
