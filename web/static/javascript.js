@@ -44,8 +44,6 @@ function display_time(){
 
      var url = 'http://18.203.168.242/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
      let json = $.getJSON(url, null, function(obj) {
-                var pre_info = obj.pre_info;
-                console.log(pre_info);
                 showResult(obj)
                 drawPredictChart(obj)
             });
@@ -64,7 +62,6 @@ function dropdown(){
             var number = stations[i].number;
             options += "<option value ='" + number + "'>" + StationName + "</option>";
 
-
         }
         document.getElementById("dropdown").innerHTML = options
 
@@ -73,7 +70,24 @@ function dropdown(){
 }
 dropdown();
 
+function Des_dropdown(){
+    let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
 
+        var stations = obj.bikeMix;
+        var options = "<option value=''>Select a destination</option>";
+        for (var i = 0; i < stations.length; i++) {
+            var StationName = stations[i].name;
+            var number = stations[i].number;
+            options += "<option value ='" + number + "'>" + StationName + "</option>";
+
+
+        }
+        document.getElementById("des_dropdown").innerHTML = options
+
+
+    })
+}
+Des_dropdown();
 
 function showResult(obj){
 
@@ -166,10 +180,10 @@ function drawPredictChart(obj) {
   var To_availableBikesPlus3h = obj[20][1];
 
   var FromHour = obj[20];
-  FromHour = parseInt(FromHour)+1;
+  FromHour = parseInt(FromHour+1);
 
   var ToHour = obj[21];
-  FromHour = parseInt(FromHour)+1;
+  FromHour = parseInt(FromHour+1);
 
   google.charts.load('current', {
                     'packages': ['corechart']
@@ -248,15 +262,35 @@ chart.draw(FromData, options);
 }
 };
 
+
+function dropdownForMarker(){
+    let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
+
+        var stations = obj.bikeMix;
+        var options = "<option value=''>Select a station</option>";
+        for (var i = 0; i < stations.length; i++) {
+            var StationName = stations[i].name;
+            var number = stations[i].number;
+            options += "<option value ='" + number + "'>" + StationName + "</option>";
+
+        }
+        document.getElementById("Markerdropdown").innerHTML = options
+
+
+    })
+}
+dropdownForMarker();
+
+
+
 function MarkerFromDropdown (){
-    var DDnumber = document.getElementById("dropdown").value;
+    var DDnumber = document.getElementById("Markerdropdown").value;
     console.log(DDnumber);
     let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
     var stations = obj.bikeMix;
     for (var i = 0; i < stations.length; i++) {
         var number = stations[i].number;
         if (number == DDnumber){
-            // console.log("hi")
             var lat=stations[i].lat;
             var lng=stations[i].lng;
 
@@ -275,7 +309,6 @@ function MarkerFromDropdown (){
 
                         icon: {
                         url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                        // scaledSize: new google.maps.Size(50, 50),
                         },
                         animation:google.maps.Animation.Drop,
                         title: stations[i].name,
@@ -301,83 +334,6 @@ function MarkerFromDropdown (){
                     showchart(number_id );
                   showchart_week(number_id );
                     showchart_hour(number_id );
-
-            }) (marker,stationsInfo,infowindow));
-
-    }};
-    });
-    };
-
-function des_dropdown(){
-    let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
-
-        var stations = obj.bikeMix;
-        var options = "<option value=''>Select a destination</option>";
-        for (var i = 0; i < stations.length; i++) {
-            var StationName = stations[i].name;
-            var number = stations[i].number;
-            options += "<option value ='" + number + "'>" + StationName + "</option>";
-
-
-        }
-        document.getElementById("des_dropdown").innerHTML = options
-
-
-    })
-}
-des_dropdown();
-
-function MarkerFromDropdown_des (){
-    var DDnumber = document.getElementById("des_dropdown").value;
-    console.log(DDnumber);
-    let json = $.getJSON("http://18.203.168.242/bikeMix", null, function (obj) {
-    var stations = obj.bikeMix;
-    for (var i = 0; i < stations.length; i++) {
-        var number = stations[i].number;
-        if (number == DDnumber){
-            // console.log("hi")
-            var lat=stations[i].lat;
-            var lng=stations[i].lng;
-
-            var stationsInfo =  '<div class="info_content">' +
-        '<p>' + 'Station Number:' + stations[i].number + '</p>' +
-        '<p>' + 'Station Name:'+ stations[i].name + '</p>' + '<p>' + 'Total Bike Stands:'+ stations[i].bike_stands + '</p>' +
-        'Available Bike Stands:'+ stations[i].available_bike_stands + '</p>' +
-        'Available Bikes:'+ stations[i].available_bikes + '</p>' +
-                        '</div>';
-                        var marker = new google.maps.Marker({
-                        position: {
-                            lat: lat,
-                            lng: lng
-                        },
-                        map: map,
-
-                        icon: {
-                        url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                        // scaledSize: new google.maps.Size(50, 50),
-                        },
-                        animation:google.maps.Animation.Drop,
-                        title: stations[i].name,
-                        station_number: stations[i].number
-                    });
-                    marker.setVisible(false);
-                    map.setZoom(15);
-                    map.panTo(marker.position);
-                    marker.setMap(map);
-
-                    var infowindow  = new google.maps.InfoWindow({
-                        content: ""
-                    });
-                    var pre = false;
-
-            google.maps.event.addListener(marker,'click', (function(marker,stationsInfo,infowindow){
-                pre = infowindow;
-                pre.setContent(stationsInfo);
-                    pre.open(map, marker);
-                    showchart(number );
-
-                  showchart_week(number );
-                    showchart_hour(number );
 
             }) (marker,stationsInfo,infowindow));
 

@@ -89,7 +89,7 @@ def predictFutureBikes(stationNumber,unixTime):
     outfile = outfile.replace(" ","")
     
     #generate file path to load model
-    filePath = "web/Models/" + outfile + ".pkl"
+    filePath = "Models/" + outfile + ".pkl"
 
     with open(filePath, 'rb') as handle:
         multiple_linreg = pickle.load(handle)
@@ -124,6 +124,6 @@ def predictFutureBikes(stationNumber,unixTime):
     AvabikeStands=bikeStands-RoundedPrediction
 
     result=(RoundedPrediction,AvabikeStands)
-    print(result)
+
     #return a tuple including available bike and available bike stands
     return result

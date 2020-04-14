@@ -23,43 +23,40 @@
 </head>
 
 <body>
-<h1>Dublin Bike</h1>
 
+<h1>Dublin Bike</h1>
+<!-- -->
 <div id="divc">
 <div id='cbg'></div>
-<div id="AllInfo"></div>
 
 <div id="googleMap" ></div>
 
 <div id="weather"></div>
-</div>
 
-<div id= selectSection>Plan your trip now!</div>
-<div id=dropdownWarp >
-    <span style="margin: 70px"></span>
-    <select id="dropdown" required onchange="return MarkerFromDropdown();"></select>
-    <span style="margin: 100px"></span>
-
-    <select id="des_dropdown" style="font-size: 15px; color: black; " required onchange="return MarkerFromDropdown_des();"></select>
-    <br><br><br>
-<div style="margin-left: 150px;">
-    <div class="col-md-4" style="float: left" >
-    <input type="text" id="datetime_1" style="color: black"/></div>
-
-    <div class="col-md-4" style="float: right">
-    <input type="text" id="datetime_2" style="color: black" /></div><br><br><br>
-
-    <div style="margin-left: 18px; ">
-    <input type="submit" class="btn btn-default"  value="Submit" onclick="display_time() ">
+<select id="Markerdropdown" required onchange="return MarkerFromDropdown();"></select>
+<div  style="color:white; font-style:italic; font-size:1.5em;padding-top:3%;padding-left:13%;">Scroll down to plan a trip!</div>
+<div id="wrap" >
+    <div class="chart"; id="chart_div_week" style="width: 25%; height: 28%; "></div>
+    <div class="chart"; id="chart_div_hour" style="width: 25%; height: 28%; "></div>
+    <div class="chart"; id="chart_div" style="width: 25%; height: 28%; "></div>
     </div>
 </div>
+
+
+<div id=dropdownWarp >
+    <div id="selectText" style="margin-top: 5%" >Plan your trip now!</div>
+    <select id="dropdown"></select>
+    <select id="des_dropdown" ></select>
+    <br><br><br>
+    <div class="col-md-4" style="float: left" >
+    <input type="text" id="datetime_1" style="color: black"/></div>
+    <div class="col-md-4" style="float: right">
+    <input type="text" id="datetime_2" style="color: black" /></div><br><br><br>
+    <input type="submit" class="btn btn-default" style="margin-left: 43%;"  value="Submit" onclick="display_time() ">
+    </div>
+
 </div>
-<div id="wrap" >
-<div id='results'></div>
-<div class="chart"; id="chart_div_week" style="width: 28%; height: 35%; "></div>
-<div class="chart"; id="chart_div_hour" style="width: 28%; height: 35%; "></div>
-<div class="chart"; id="chart_div" style="width: 28%; height: 35%; "></div>
-</div>
+<div id='results' style="padding:2%; "></div>
 <div class="chart"; id="chart_div_predictFrom" style="width: 28%; height: 35%;"></div>
 <div class="chart"; id="chart_div_predictTo" style="width: 28%; height: 35%;"></div>
 </body>

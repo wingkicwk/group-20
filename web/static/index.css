@@ -16,8 +16,8 @@ h1{
     font-family: Georgia;
     
 }
-
-#selectSection{
+    
+.selectSection{
     padding-bottom: 5%;
     padding-left:5%;
     font-size:3em;
@@ -26,7 +26,11 @@ h1{
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
     font-family: Georgia;
 }
-
+#selectText{
+    font-size:3em;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    font-family: Georgia;
+}
 #results{
     padding-left:5%;
     color:#F8F3F6;
@@ -39,9 +43,23 @@ h1{
 
 #dropdownWarp{
     display: inline-block;
+    margin:5%;
 } 
 #dropdown {
-    padding-right:8px;   
+   
+    padding-right:5%;   
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgb(204, 204, 204);
+    position: relative;
+    font-size: 14px;
+    color: #474747;
+   cursor: pointer;
+    font-size: 100%;
+}
+#des_dropdown {
+    padding-right:5%;   
+    /* margin-right:5%; */
     background-color: #fff;
     border-radius: 5px;
     box-shadow: 0 0 2px rgb(204, 204, 204);
@@ -65,12 +83,8 @@ h1{
 }
 .chart{
     display: inline-block; /*display:inline block element*/
-    /* background-color: #E8E7E7; */
-    /* height:70%;
-    width:29%;  */
     margin:1.5%;
     padding:1%;
-
 }
 
 #divc{
@@ -83,7 +97,7 @@ h1{
     position:absolute; /*position here*/
     background-color:black; 
     opacity:0.4;
-    height:80%; 
+    height:100%; 
 /*reference https://stackoverflow.com/questions/5135019/css-opacity-only-to-background-color-not-the-text-on-it*/ 
     width:100%;
     z-index:-1;
@@ -92,10 +106,10 @@ h1{
 
 
 #googlemap{
-    margin-top:5%; 
+    margin-top:1%; 
     color:black;
-    width:50%;
-    height:60%;
+    width:40%;
+    height:50%;
     float:left;
     margin-left: 3%;
 }
@@ -103,6 +117,7 @@ table{
     border-collapse:collapse;
     color:white;
     float:right;
+    margin-right:5%;
 }
 
 th, td{
@@ -110,7 +125,7 @@ th, td{
 }
 
 table, th, td{
-    margin-top:5%;
+    margin-top:3%;
     border: none;
 }
 
@@ -133,3 +148,7 @@ tbody>tr>:nth-child(2){
 
 } 
    
+#Markerdropdown{
+    margin-top:3%; 
+    margin-left: 14%;
+}
