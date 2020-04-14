@@ -115,7 +115,7 @@ h1{
 }
 table{
     border-collapse:collapse;
-    color:white;
+    /*color:white;*/
     float:right;
     margin-right:5%;
 }
