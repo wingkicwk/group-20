@@ -1,5 +1,13 @@
+var Variable;
+function myFunction() {
+    Variable = setTimeout(showPage, 2000);
+}
 
-// create the dropdown list for time
+function showPage() {
+  document.getElementById("Myloader").style.display = "none";
+  document.getElementById("ActualDiv").style.display = "block";
+}
+
 var todayDate = new Date().getDate();
 $(function() {
     $('#datetime_1').datetimepicker({
@@ -509,5 +517,3 @@ chart.draw(data, options);
 }
 
 }
-
-

@@ -97,7 +97,7 @@ h1{
     position:absolute; /*position here*/
     background-color:black; 
     opacity:0.4;
-    height:100%; 
+    height:110%; 
 /*reference https://stackoverflow.com/questions/5135019/css-opacity-only-to-background-color-not-the-text-on-it*/ 
     width:100%;
     z-index:-1;
@@ -115,9 +115,9 @@ h1{
 }
 table{
     border-collapse:collapse;
-    /*color:white;*/
     float:right;
     margin-right:5%;
+    color:white;
 }
 
 th, td{
@@ -134,7 +134,7 @@ table{
 }
 
 tr{
-    border-bottom: solid 1px black
+    border-bottom: solid 1px grey;
 }
 
 tbody>tr>:nth-child(1){
@@ -149,6 +149,47 @@ tbody>tr>:nth-child(2){
 } 
    
 #Markerdropdown{
-    margin-top:3%; 
-    margin-left: 14%;
+
+    margin-top:2%; 
+    margin-left: 10%;
 }
+
+/* reference of loader: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_loader5 */
+#Myloader {
+    position: absolute;
+    width: 132px;
+    height: 132px;
+    left: 50%;
+    top: 50%;
+    z-index: 1;
+    margin: -75px 0 0 -75px;
+    border: 16px solid #fffafa;
+    border-radius: 48%;
+    border-top: 16px solid #2979af;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  /* Add animation to the apge */
+  .Pageanimation {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+  
+  @keyframes animatebottom { 
+    from{ bottom:-100px; opacity:0 } 
+    to{ bottom:0; opacity:1 }
+  } 
+  
+  #ActualDiv {
+    display: none;
+    text-align: center;
+  }
