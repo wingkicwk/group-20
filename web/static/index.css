@@ -113,11 +113,11 @@ h1{
     float:left;
     margin-left: 3%;
 }
-table{
+.table1 table{
     border-collapse:collapse;
     float:right;
     margin-right:5%;
-    /*color:white;*/
+    color:white;
 }
 
 th, td{
