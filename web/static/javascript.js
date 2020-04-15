@@ -5,17 +5,13 @@ $(function() {
     $('#datetime_1').datetimepicker({
                 minDate: new Date(),
                 maxDate: new Date(new Date().setDate(todayDate + 4)),
-                format: 'YYYY-MM-DD HH:mm',
 
-                stepping: 30,
                 sideBySide: true,
             });
     $('#datetime_2').datetimepicker({
                 minDate: new Date(),
                 maxDate: new Date(new Date().setDate(todayDate + 4)),
-                format: 'YYYY-MM-DD HH:mm',
 
-                stepping: 30,
                 sideBySide: true,
             });
     $("#datetime_1").on("dp.change", function(e) {
