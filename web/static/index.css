@@ -117,7 +117,7 @@ table{
     border-collapse:collapse;
     float:right;
     margin-right:5%;
-    color:white;
+    /*color:white;*/
 }
 
 th, td{
