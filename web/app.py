@@ -269,8 +269,6 @@ def get_hour(number_id):
     chart_info = c_df.values.tolist()
 
     return jsonify(chart_info=chart_info)
-if __name__ == '__main__':
-    app.run( debug=True)
 
-# if __name__ == '__main__':
-#     app.run(host="0.0.0.0", port=80, debug=True)
+if __name__ == '__main__':
+    app.run(host="0.0.0.0", port=80, debug=True)

@@ -1,12 +1,4 @@
-var Variable;
-function myFunction() {
-    Variable = setTimeout(showPage, 2000);
-}
 
-function showPage() {
-  document.getElementById("Myloader").style.display = "none";
-  document.getElementById("ActualDiv").style.display = "block";
-}
 
 var todayDate = new Date().getDate();
 $(function() {
@@ -433,11 +425,6 @@ let json = $.getJSON(url, null, function (obj) {
         }
 
 
-
-    console.log('arr', arr);
-        // arr.push(arr1);
-
-
 var data = google.visualization.arrayToDataTable(arr);
 
 var options = {
@@ -490,7 +477,6 @@ let json = $.getJSON(url, null, function (obj) {
 
 
     }
-    // console.log('arr1', arr1);
         arr.push(arr1)
 }
 
@@ -517,3 +503,15 @@ chart.draw(data, options);
 }
 
 }
+
+var Variable;
+function myFunction() {
+    Variable = setTimeout(showPage, 2000);
+}
+
+function showPage() {
+  document.getElementById("Myloader").style.display = "none";
+  document.getElementById("ActualDiv").style.display = "block";
+}
+
+window.addEventListener('load', myFunction);

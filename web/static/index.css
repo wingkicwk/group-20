@@ -163,7 +163,7 @@ tbody>tr>:nth-child(2){
     top: 50%;
     z-index: 1;
     margin: -75px 0 0 -75px;
-    border: 16px solid #fffafa;
+    border: 16px solid #534f4f69;
     border-radius: 48%;
     border-top: 16px solid #2979af;
     -webkit-animation: spin 2s linear infinite;
