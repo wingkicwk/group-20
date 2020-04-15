@@ -33,14 +33,15 @@ function display_time(){
                 var selecttime1_unix = selecttime1.unix();
                 var selecttime2_unix = selecttime2.unix();
             }
+            // Maybe because of daylight saving time, the selected time and unix timestamp has one hour time difference, therefore an hour is added to unix timestamp before sent to flask
+            selecttime1_unix=selecttime1_unix+ 3600
+            selecttime2_unix=selecttime2_unix+ 3600
+
      console.log(selecttime1_unix);
      console.log(selecttime2_unix);
 
      var station1 = $('#dropdown').val();
      var station2 = $('#des_dropdown').val();
-
-     console.log(station1);
-     console.log(station2);
 
      var url = 'http://18.203.168.242/' + station1 + '/' + selecttime1_unix + '/' + station2 + '/' + selecttime2_unix;
      let json = $.getJSON(url, null, function(obj) {
@@ -90,7 +91,7 @@ function Des_dropdown(){
 Des_dropdown();
 
 function showResult(obj){
-
+  
   var FromStation=obj[0];
   var From_availableBikes=obj[6][0];
   var ToStation=obj[1];
@@ -113,7 +114,6 @@ function showResult(obj){
   }else if (From_DayOfWeek==6){
     From_DayOfWeek="Sunday";
   };
-
 
   var To_DTime=obj[4];
 
@@ -180,10 +180,10 @@ function drawPredictChart(obj) {
   var To_availableBikesPlus3h = obj[20][1];
 
   var FromHour = obj[20];
-  FromHour = parseInt(FromHour+1);
+  FromHour = parseInt(FromHour);
 
   var ToHour = obj[21];
-  FromHour = parseInt(FromHour+1);
+  ToHour = parseInt(ToHour);
 
   google.charts.load('current', {
                     'packages': ['corechart']
@@ -197,7 +197,7 @@ function drawPredictChart(obj) {
           ['1h-', To_availableBikesSub1h],
           ['2h-', To_availableBikesSub2h],
           ['3h-', To_availableBikesSub3h],
-          [FromHour, From_availableBikes],
+          [ToHour, To_availableBikes],
           ['1h+', To_availableBikesPlus1h],
           ['2h+', To_availableBikesPlus2h],
           ['3h+', To_availableBikesPlus3h],
@@ -506,7 +506,7 @@ chart.draw(data, options);
 
 var Variable;
 function myFunction() {
-    Variable = setTimeout(showPage, 2000);
+    Variable = setTimeout(showPage, 1500);
 }
 
 function showPage() {

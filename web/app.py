@@ -36,7 +36,7 @@ def prediction(unixTime, FromStation, ToStation, ToTime):
     From_DTime = datetime.utcfromtimestamp(unixTime)
 
     #create datetime object from unix time of drop off station
-    To_DTime = datetime.utcfromtimestamp(unixTime)
+    To_DTime = datetime.utcfromtimestamp(ToTime)
 
 
      #get the time 3 hours before and after the time selected by user to form a graph
@@ -49,13 +49,13 @@ def prediction(unixTime, FromStation, ToStation, ToTime):
     FromTimePlus2h = unixTime + 3600 * 2
     FromTimePlus3h = unixTime + 3600 * 3
 
-    ToTimeSub1h = unixTime - 3600
-    ToTimeSub2h = unixTime - 3600 * 2
-    ToTimeSub3h = unixTime - 3600 * 3
+    ToTimeSub1h = ToTime - 3600
+    ToTimeSub2h = ToTime - 3600 * 2
+    ToTimeSub3h = ToTime - 3600 * 3
 
-    ToTimePlus1h = unixTime + 3600
-    ToTimePlus2h = unixTime + 3600 * 2
-    ToTimePlus3h = unixTime + 3600 * 3
+    ToTimePlus1h = ToTime + 3600
+    ToTimePlus2h = ToTime + 3600 * 2
+    ToTimePlus3h = ToTime + 3600 * 3
 
     #predict available bikes and stands number with station number and unix time given
     From_availableBikes = predict.predictFutureBikes(int(FromStation), unixTime)
@@ -269,6 +269,8 @@ def get_hour(number_id):
     chart_info = c_df.values.tolist()
 
     return jsonify(chart_info=chart_info)
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=80, debug=True)
