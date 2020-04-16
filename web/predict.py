@@ -123,7 +123,11 @@ def predictFutureBikes(stationNumber,unixTime):
     #get available bike stands by subtract available bikes number from total bike stands
     AvabikeStands=bikeStands-RoundedPrediction
 
-    result=(RoundedPrediction,AvabikeStands)
+    #turn feels_like to int toshow on web
+    feels_like=int(feels_like)
+    
+    result=(RoundedPrediction,AvabikeStands, main,feels_like)
 
     #return a tuple including available bike and available bike stands
     return result
+# predictFutureBikes(31,1587081600)

@@ -94,6 +94,12 @@ function showResult(obj){
   var To_availableBikeStands=obj[14][1];
   var From_DTime=obj[2];
 
+  var From_feels_like=obj[6][3]
+  var To_feels_like=obj[14][3]
+
+  var From_main=obj[6][2]
+  var To_main=obj[14][2]
+
   var From_DayOfWeek=[3];
   if (From_DayOfWeek==0){
     From_DayOfWeek="Monday";
@@ -147,9 +153,7 @@ function showResult(obj){
 
         }
 
-  document.getElementById('results').innerHTML = "Our model is showing there will be " + From_availableBikes
-  + " bikes available at pick up station: " +FromStationName + " on " + From_DayOfWeek+ " at " + From_DTime +"<br>"+" and " +
-  To_availableBikeStands+ " bike stands available at drop off station: " +ToStationName+" on " + To_DayOfWeek+ " at " + To_DTime +"."
+  document.getElementById('results').innerHTML = "There will be " + From_availableBikes+ " bikes available at pick up station: " +FromStationName + " on " + From_DayOfWeek+ " at " + From_DTime +" and weather is "+From_feels_like+"°C, "+From_main+".<br>" +"At drop off station: " +ToStationName+" there will be "+To_availableBikeStands+  " bike stands available on "+ To_DayOfWeek+ " at " + To_DTime +" and weather is "+To_feels_like+"°C, "+To_main+"."
 
 
 })
@@ -157,23 +161,23 @@ function showResult(obj){
 
 function drawPredictChart(obj) {
 
-  var From_availableBikes = obj[7][0];
-  var From_availableBikesSub1h = obj[8][0];
-  var From_availableBikesSub2h = obj[9][0];
-  var From_availableBikesSub3h = obj[10][0];
+  var From_availableBikes = obj[6][0];
+  var From_availableBikesSub1h = obj[7][0];
+  var From_availableBikesSub2h = obj[8][0];
+  var From_availableBikesSub3h = obj[9][0];
 
-  var From_availableBikesPlus1h = obj[11][0];
-  var From_availableBikesPlus2h = obj[12][0];
-  var From_availableBikesPlus3h = obj[13][0];
+  var From_availableBikesPlus1h = obj[10][0];
+  var From_availableBikesPlus2h = obj[11][0];
+  var From_availableBikesPlus3h = obj[12][0];
 
-  var To_availableBikes = obj[14][1];
-  var To_availableBikesSub1h = obj[15][1];
-  var To_availableBikesSub2h = obj[16][1];
-  var To_availableBikesSub3h = obj[17][1];
+  var To_availableBikes = obj[13][1];
+  var To_availableBikesSub1h = obj[14][1];
+  var To_availableBikesSub2h = obj[15][1];
+  var To_availableBikesSub3h = obj[16][1];
 
-  var To_availableBikesPlus1h = obj[18][1];
-  var To_availableBikesPlus2h = obj[19][1];
-  var To_availableBikesPlus3h = obj[20][1];
+  var To_availableBikesPlus1h = obj[17][1];
+  var To_availableBikesPlus2h = obj[18][1];
+  var To_availableBikesPlus3h = obj[19][1];
 
   var FromHour = obj[20];
   FromHour = parseInt(FromHour);
