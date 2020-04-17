@@ -196,10 +196,14 @@ tbody>tr>:nth-child(2){
 
   @media only screen and (max-width:620px) {
       /* For mobile phones: */
-      #googlemap, #weather, .chart {
+      #googlemap, #weather,#chart_div,#chart_div_hour,#chart_div_week, #chart_div_predictFrom, #chart_div_predictTo{
           width: 100%;
       }
       #des_dropdown, #dropdown{
           width: 50%;
+      }
+      #dropdownWarp{
+          position: relative;
+          margin-top:2%;
       }
   }
