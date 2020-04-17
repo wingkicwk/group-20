@@ -42,7 +42,7 @@ h1{
 
 
 #dropdownWarp{
-    /*display: inline-block;*/
+    display: inline-block;
     margin:5%;
 } 
 #dropdown {
@@ -196,6 +196,9 @@ tbody>tr>:nth-child(2){
 
   @media only screen and (max-width:620px) {
       /* For mobile phones: */
+      .chart{
+          display: block;
+      }
       #googlemap, #weather,#chart_div,#chart_div_hour,#chart_div_week, #chart_div_predictFrom, #chart_div_predictTo{
           width: 100%;
       }
