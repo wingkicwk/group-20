@@ -42,7 +42,7 @@ h1{
 
 
 #dropdownWarp{
-    display: inline-block;
+    /*display: inline-block;*/
     margin:5%;
 } 
 #dropdown {
