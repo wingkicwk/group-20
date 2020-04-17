@@ -88,6 +88,10 @@ h1{
     margin:1.5%;
     padding:1%;
 }
+#chart_div_predictFrom, #chart_div_predictTo{
+    width: 28%;
+    height: 35%;
+}
 
 #divc{
     position:relative;
@@ -212,6 +216,6 @@ tbody>tr>:nth-child(2){
       #dropdownWarp{
 
           position: relative;
-          margin-top:50%;
+          margin-top:100%;
       }
   }
