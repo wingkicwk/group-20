@@ -193,3 +193,13 @@ tbody>tr>:nth-child(2){
     display: none;
     text-align: center;
   }
+
+  @media only screen and (max-width:620px) {
+      /* For mobile phones: */
+      #googlemap, #weather, .chart {
+          width: 100%;
+      }
+      #des_dropdown, #dropdown, .chart {
+          width: 50%;
+      }
+  }
