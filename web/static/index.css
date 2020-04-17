@@ -199,7 +199,7 @@ tbody>tr>:nth-child(2){
       #googlemap, #weather, .chart {
           width: 100%;
       }
-      #des_dropdown, #dropdown, .chart {
+      #des_dropdown, #dropdown{
           width: 50%;
       }
   }
