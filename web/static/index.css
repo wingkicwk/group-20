@@ -83,6 +83,8 @@ h1{
 }
 .chart{
     display: inline-block; /*display:inline block element*/
+    width: 25%;
+    height: 30%;
     margin:1.5%;
     padding:1%;
 }
@@ -210,6 +212,6 @@ tbody>tr>:nth-child(2){
       #dropdownWarp{
 
           position: relative;
-          margin-top:30%;
+          margin-top:50%;
       }
   }
