@@ -30,4 +30,4 @@ To run the scrapers and collect data on weather and bikes stations
 Run weather_data.py and bikeMix.py to scrape data
 
 To train and update the machine learning model
-Set crontab job for /web/models.py to regenerate ML models
+Run /web/models.py to regenerate ML models
